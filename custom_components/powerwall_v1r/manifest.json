@@ -1,0 +1,13 @@
+{
+  "domain": "powerwall_v1r",
+  "name": "Powerwall V1R",
+  "version": "0.1.0",
+  "documentation": "https://github.com/Teslemetry/powerwall-v1r",
+  "issue_tracker": "https://github.com/Teslemetry/powerwall-v1r/issues",
+  "codeowners": ["@Teslemetry"],
+  "config_flow": true,
+  "dependencies": ["application_credentials"],
+  "iot_class": "cloud_polling",
+  "integration_type": "hub",
+  "requirements": ["tesla-fleet-api==1.4.5"]
+}

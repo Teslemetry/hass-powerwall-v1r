@@ -1,0 +1,47 @@
+{
+  "config": {
+    "step": {
+      "pick_implementation": {
+        "title": "Pick authentication method"
+      },
+      "password": {
+        "title": "Powerwall Gateway password",
+        "description": "Enter the WiFi hotspot password for **{site_name}** — it is on the sticker behind the gateway door. Leave blank to skip this site.",
+        "data": {
+          "gateway_password": "Gateway password",
+          "gateway_host": "Gateway host or IP (optional)"
+        }
+      },
+      "pair_install": {
+        "title": "Pair Powerwall key",
+        "description": "A pairing key has been sent to your Powerwall Gateway(s). Toggle the disconnect switch on each gateway, then continue. (attempt {attempt})"
+      },
+      "lan_verify": {
+        "title": "Verify gateway connection",
+        "description": "Confirming a local connection to **{site_name}**. Adjust the host or password if verification fails.",
+        "data": {
+          "gateway_host": "Gateway host or IP",
+          "gateway_password": "Gateway password"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reauthenticate {name}",
+        "description": "The Powerwall V1R integration needs to re-authenticate with Tesla."
+      }
+    },
+    "error": {
+      "pair_pending": "The gateway hasn't confirmed the key yet. Toggle the disconnect switch and try again.",
+      "invalid_password": "The gateway rejected that password.",
+      "cannot_connect_local": "Could not reach the gateway at that host."
+    },
+    "abort": {
+      "already_configured": "This energy site is already configured.",
+      "oauth_error": "Tesla OAuth authentication failed.",
+      "cannot_connect": "Failed to connect to the Tesla Fleet API.",
+      "subscription_required": "A Tesla Fleet API subscription is required.",
+      "no_sites": "No energy sites were found on this account.",
+      "pair_install_failed": "Failed to install the pairing key on the gateway.",
+      "unknown": "An unknown error occurred."
+    }
+  }
+}
