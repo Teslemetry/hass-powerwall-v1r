@@ -21,6 +21,7 @@ from tesla_fleet_api.exceptions import (
     SubscriptionRequired,
     TeslaFleetError,
 )
+from tesla_fleet_api.tesla.energysite import EnergySite
 from tesla_fleet_api.tesla.fleet import TeslaFleetApi
 import voluptuous as vol
 
@@ -42,6 +43,7 @@ from .const import (
     CONF_ENERGY_SITE_ID,
     CONF_GATEWAY_HOST,
     CONF_GATEWAY_PASSWORD,
+    CONF_REGION,
     CONF_TOKEN,
     DOMAIN,
     KEY_FILENAME,
@@ -49,6 +51,7 @@ from .const import (
     KEY_PAIRING_POLL_INTERVAL,
     LOGGER,
 )
+from .helpers import region_from_token
 
 
 def _extract_host(networking_status: dict[str, Any] | None) -> str:
@@ -116,6 +119,7 @@ class OAuth2FlowHandler(
         """Initialize config flow state."""
         super().__init__()
         self._token_data: dict[str, Any] = {}
+        self._region: Region = "na"
         self._fleet: TeslaFleetApi | None = None
         self._key_pem: bytes | None = None
         self._sites_remaining: list[dict[str, Any]] = []
@@ -147,10 +151,17 @@ class OAuth2FlowHandler(
         access_token = data["token"]["access_token"]
         session = async_get_clientsession(self.hass)
 
+        try:
+            region = region_from_token(access_token)
+        except (KeyError, ValueError) as err:
+            LOGGER.error("Could not determine region from token: %s", err)
+            return self.async_abort(reason="oauth_error")
+        self._region = region
+
         fleet = TeslaFleetApi(
             session=session,
             access_token=access_token,
-            region=Region.NA,
+            region=region,
             charging_scope=False,
             partner_scope=False,
             user_scope=False,
@@ -161,18 +172,7 @@ class OAuth2FlowHandler(
         try:
             response = await fleet.products()
         except InvalidRegion:
-            try:
-                await fleet.find_server()
-                response = await fleet.products()
-            except InvalidToken:
-                return self.async_abort(reason="oauth_error")
-            except SubscriptionRequired:
-                return self.async_abort(reason="subscription_required")
-            except ClientConnectionError:
-                return self.async_abort(reason="cannot_connect")
-            except TeslaFleetError as err:
-                LOGGER.error("Fleet API error: %s", err)
-                return self.async_abort(reason="unknown")
+            return self.async_abort(reason="oauth_error")
         except InvalidToken:
             return self.async_abort(reason="oauth_error")
         except SubscriptionRequired:
@@ -192,7 +192,7 @@ class OAuth2FlowHandler(
             site_name = (
                 product.get("site_name") or f"Energy Site {site_id}"
             )
-            api_site = fleet.energySites.create(int(site_id))
+            api_site: EnergySite = fleet.energySites.create(int(site_id))
             host = ""
             try:
                 networking = await api_site.get_networking_status()
@@ -217,11 +217,11 @@ class OAuth2FlowHandler(
         # Reauth/Reconfigure: just refresh the token on the existing entry.
         if self.source == SOURCE_REAUTH:
             entry = self._get_reauth_entry()
-            new_data = {**entry.data, CONF_TOKEN: data}
+            new_data = {**entry.data, CONF_TOKEN: data, CONF_REGION: region}
             return self.async_update_reload_and_abort(entry, data=new_data)
         if self.source == SOURCE_RECONFIGURE:
             entry = self._get_reconfigure_entry()
-            new_data = {**entry.data, CONF_TOKEN: data}
+            new_data = {**entry.data, CONF_TOKEN: data, CONF_REGION: region}
             return self.async_update_reload_and_abort(entry, data=new_data)
 
         self._sites_remaining = sites
@@ -290,7 +290,9 @@ class OAuth2FlowHandler(
                 return self.async_abort(reason="unknown")
 
             for site in self._pending:
-                api_site = self._fleet.energySites.create(site["site_id"])
+                api_site: EnergySite = self._fleet.energySites.create(
+                site["site_id"]
+            )
                 try:
                     await api_site.add_authorized_client(
                         self._fleet.rsa_public_der_pkcs1,
@@ -330,7 +332,9 @@ class OAuth2FlowHandler(
             for site in self._pending:
                 if site["paired"]:
                     continue
-                api_site = self._fleet.energySites.create(site["site_id"])
+                api_site: EnergySite = self._fleet.energySites.create(
+                site["site_id"]
+            )
                 try:
                     response = await api_site.list_authorized_clients()
                 except TeslaFleetError as err:
@@ -447,6 +451,7 @@ class OAuth2FlowHandler(
         """Build the persisted data for a single site's config entry."""
         return {
             CONF_TOKEN: self._token_data,
+            CONF_REGION: self._region,
             CONF_ENERGY_SITE_ID: site["site_id"],
             CONF_GATEWAY_HOST: site["host"],
             CONF_GATEWAY_PASSWORD: site["password"],

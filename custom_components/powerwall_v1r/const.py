@@ -25,6 +25,7 @@ SCOPES: list[Scope] = [
 CONF_ENERGY_SITE_ID = "energy_site_id"
 CONF_GATEWAY_PASSWORD = "gateway_password"
 CONF_GATEWAY_HOST = "gateway_host"
+CONF_REGION = "region"
 CONF_TOKEN = "token"
 
 KEY_FILENAME = "powerwall_v1r.key"
