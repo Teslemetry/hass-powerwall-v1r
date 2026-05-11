@@ -1,13 +1,15 @@
 # Powerwall V1R
 
-Custom Home Assistant integration that reconstructs Powerwall-style sensors from a Teslemetry energy site, for installations using the original Powerwall V1 hardware that Tesla no longer exposes through the standard Powerwall integration.
+Custom Home Assistant integration for the original Powerwall V1 hardware that Tesla no longer exposes through the standard Powerwall integration.
+
+Setup is bootstrapped through your existing [Teslemetry](https://teslemetry.com) integration: pick an energy site, complete a one-time local pairing with the gateway, and the integration then polls the gateway directly over the LAN. No cloud round-trips at runtime.
 
 ## Installation (HACS)
 
 1. In HACS, open **Integrations** → menu → **Custom repositories**.
 2. Add this repository's URL with category **Integration**.
 3. Install **Powerwall V1R** and restart Home Assistant.
-4. **Settings → Devices & Services → Add Integration → Powerwall V1R** and enter your Teslemetry energy site ID.
+4. **Settings → Devices & Services → Add Integration → Powerwall V1R**, select the Teslemetry entry and energy site, then complete local gateway pairing.
 
 ## Manual installation
 
@@ -16,20 +18,59 @@ Copy `custom_components/powerwall_v1r/` into your Home Assistant `config/custom_
 ## Requirements
 
 - Home Assistant 2024.4 or newer
-- The [Teslemetry](https://teslemetry.com) integration installed and providing `sensor.energy_site_<id>_*` entities
+- The [Teslemetry](https://teslemetry.com) integration installed with at least one energy site
+- Network reachability from Home Assistant to the Powerwall gateway
+
+## How it works
+
+Each gateway endpoint is polled on its own cadence by a dedicated coordinator:
+
+- **status** — `/api/system_status` (fast)
+- **meters** — `/api/meters/aggregates` (fast)
+- **battery SoE** — direct state-of-energy endpoint (medium)
+- **grid status** — grid connection state (medium)
+- **config** — site configuration (slow; only changes on user edits)
+
+All coordinators share a single authenticated `PowerwallClient`, so the transport and session are reused.
 
 ## Entities
 
-The integration creates a device per configured energy site with the following sensors mirrored from the underlying Teslemetry entities:
+The integration creates one device per energy site. Many entities are disabled by default — enable them under the device page if you want the extra detail.
 
-- Battery power, percentage charged, energy left, total pack energy
-- Solar power
-- Load power
-- Grid power
+### Power flows (enabled by default)
+- Battery / Site / Load / Solar power
+- Solar RGM, Generator, Conductor power *(disabled by default)*
 
-## Brand assets
+### Battery
+- Battery state of energy (direct gateway reading, primary)
+- Percentage charged (computed from remaining ÷ full pack, diagnostic)
+- Energy remaining, Full pack energy
 
-Brand PNGs live in `brand/`. To have the icon shown in Home Assistant's UI globally, also submit them to [home-assistant/brands](https://github.com/home-assistant/brands) under `custom_integrations/powerwall_v1r/`.
+### Per-location meter aggregates *(disabled by default)*
+For `site`, `battery`, `load`, `solar`:
+- Apparent power, Reactive power, Voltage, Current, Frequency
+- Energy imported, Energy exported (long-term statistics)
+
+### Islanding & gateway diagnostics
+- Island mode, Islander grid state, Islander grid connection
+- Active alerts
+- Per-phase ISLANDER frequency & voltage (Load/Main sides) *(mostly disabled by default)*
+
+### SYNC meters X / Y *(disabled by default)*
+- Per-CT (A/B/C) real power, reactive power, current
+- Per-phase L–N voltages
+
+### Grid & configuration
+- Grid status
+- Backup reserve percent
+- Net meter mode, Customer preferred export rule
+- Nominal system energy / power (AC)
+- Grid code, Country, Distributor *(disabled by default)*
+
+### Binary sensors
+- Grid OK, Site running
+- Microgrid OK, Contactor closed, Site manager running *(diagnostic)*
+- esCAN / pw3CAN firmware updating *(diagnostic)*
 
 ## Releases
 
@@ -37,4 +78,4 @@ This repository uses GitHub Releases. HACS will offer the five most recent relea
 
 ## License
 
-MIT
+Apache License 2.0 — see [LICENSE](LICENSE).
