@@ -18,6 +18,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import CONF_GATEWAY_HOST, CONF_GATEWAY_PASSWORD, KEY_FILENAME
 from .coordinator import (
+    BackupEventsCoordinator,
     BatterySoeCoordinator,
     ConfigCoordinator,
     GridStatusCoordinator,
@@ -27,7 +28,13 @@ from .coordinator import (
     StatusCoordinator,
 )
 
-PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR, Platform.SENSOR]
+PLATFORMS: list[Platform] = [
+    Platform.BINARY_SENSOR,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+]
 
 
 async def async_setup_entry(
@@ -62,6 +69,7 @@ async def async_setup_entry(
     battery_soe = BatterySoeCoordinator(hass, entry, client)
     grid_status = GridStatusCoordinator(hass, entry, client)
     config = ConfigCoordinator(hass, entry, client)
+    backup_events = BackupEventsCoordinator(hass, entry, client)
 
     await asyncio.gather(
         status.async_config_entry_first_refresh(),
@@ -69,6 +77,7 @@ async def async_setup_entry(
         battery_soe.async_config_entry_first_refresh(),
         grid_status.async_config_entry_first_refresh(),
         config.async_config_entry_first_refresh(),
+        backup_events.async_config_entry_first_refresh(),
     )
 
     entry.runtime_data = PowerwallRuntimeData(
@@ -80,6 +89,7 @@ async def async_setup_entry(
         battery_soe=battery_soe,
         grid_status=grid_status,
         config=config,
+        backup_events=backup_events,
     )
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True

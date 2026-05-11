@@ -16,6 +16,7 @@ from datetime import timedelta
 from typing import Any
 
 from aiopowerwall import (
+    BackupEventsPayload,
     PowerwallAuthenticationError,
     PowerwallClient,
     PowerwallConnectionError,
@@ -29,6 +30,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .const import (
     DOMAIN,
     LOGGER,
+    SCAN_BACKUP_EVENTS_SECONDS,
     SCAN_BATTERY_SOE_SECONDS,
     SCAN_CONFIG_SECONDS,
     SCAN_GRID_STATUS_SECONDS,
@@ -51,6 +53,7 @@ class PowerwallRuntimeData:
     battery_soe: BatterySoeCoordinator
     grid_status: GridStatusCoordinator
     config: ConfigCoordinator
+    backup_events: BackupEventsCoordinator
 
 
 class _BasePowerwallCoordinator[T](DataUpdateCoordinator[T]):
@@ -174,3 +177,20 @@ class ConfigCoordinator(_BasePowerwallCoordinator[dict[str, Any]]):
 
     async def _fetch(self) -> dict[str, Any]:
         return await self.client.get_config(force=True)
+
+
+class BackupEventsCoordinator(_BasePowerwallCoordinator[BackupEventsPayload]):
+    """Polls active/scheduled manual backup events."""
+
+    _label = "backup_events"
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        entry: PowerwallV1RConfigEntry,
+        client: PowerwallClient,
+    ) -> None:
+        super().__init__(hass, entry, client, SCAN_BACKUP_EVENTS_SECONDS)
+
+    async def _fetch(self) -> BackupEventsPayload:
+        return await self.client.get_backup_events()
