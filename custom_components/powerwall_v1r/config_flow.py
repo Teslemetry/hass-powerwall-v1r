@@ -1,492 +1,395 @@
-"""Config flow for Powerwall V1R."""
+"""Config flow for Powerwall V1R.
+
+Consumes the core `teslemetry` integration's runtime data rather than running
+its own OAuth flow — the user picks one of their existing Teslemetry entries
+and one energy site under it, then completes the local gateway pairing. One
+config entry per site; if the user has multiple sites they re-run the flow.
+"""
 
 from __future__ import annotations
 
 import asyncio
 from collections.abc import Mapping
-import logging
 from pathlib import Path
 from typing import Any
 
-from aiohttp import ClientConnectionError
+import voluptuous as vol
+from homeassistant.components.teslemetry import TeslemetryConfigEntry
+from homeassistant.components.teslemetry.models import TeslemetryEnergyData
+from homeassistant.config_entries import (
+    ConfigEntryState,
+    ConfigFlow,
+    ConfigFlowResult,
+)
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from tesla_fleet_api.const import (
     AuthorizedClientKeyType,
     AuthorizedClientState,
     AuthorizedClientType,
-    Region,
 )
-from tesla_fleet_api.exceptions import (
-    InvalidRegion,
-    InvalidToken,
-    SubscriptionRequired,
-    TeslaFleetError,
-)
-from tesla_fleet_api.tesla.energysite import EnergySite
-from tesla_fleet_api.tesla.fleet import TeslaFleetApi
-import voluptuous as vol
-
-from homeassistant.components.application_credentials import (
-    ClientCredential,
-    async_import_client_credential,
-)
-from homeassistant.config_entries import (
-    SOURCE_IMPORT,
-    SOURCE_REAUTH,
-    SOURCE_RECONFIGURE,
-    ConfigFlowResult,
-)
-from homeassistant.helpers import config_entry_oauth2_flow
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from tesla_fleet_api.exceptions import TeslaFleetError
+from tesla_fleet_api.teslemetry import Teslemetry
 
 from .const import (
-    CLIENT_ID,
     CONF_ENERGY_SITE_ID,
     CONF_GATEWAY_HOST,
     CONF_GATEWAY_PASSWORD,
-    CONF_REGION,
-    CONF_TOKEN,
+    CONF_PARENT_ENTRY_ID,
     DOMAIN,
     KEY_FILENAME,
     KEY_PAIRING_POLL_ATTEMPTS,
     KEY_PAIRING_POLL_INTERVAL,
     LOGGER,
 )
-from .helpers import region_from_token
 
 
 def _extract_host(networking_status: dict[str, Any] | None) -> str:
-    """Best-effort extraction of an IPv4 from a networking status payload."""
+    """Extract an IPv4 from a Teslemetry networking status payload.
+
+    Checks ``eth`` then ``wifi``, preferring an interface flagged
+    ``active_route``, then any interface with an ``ipv4_config.address``.
+    """
     if not networking_status:
         return ""
     payload = networking_status.get("response", networking_status)
-    for path in (
-        ("wifi_status", "ip_address"),
-        ("wifi_status", "ipv4_address"),
-        ("ethernet_status", "ip_address"),
-        ("ethernet_status", "ipv4_address"),
-    ):
-        node: Any = payload
-        for key in path:
-            if not isinstance(node, Mapping):
-                node = None
-                break
-            node = node.get(key)
-        if isinstance(node, str) and node:
-            return node
+    if not isinstance(payload, Mapping):
+        return ""
+
+    def _addr(iface: Any) -> str:
+        if not isinstance(iface, Mapping):
+            return ""
+        ipv4 = iface.get("ipv4_config")
+        addr = ipv4.get("address") if isinstance(ipv4, Mapping) else None
+        return addr if isinstance(addr, str) else ""
+
+    interfaces = [payload.get(name) for name in ("eth", "wifi")]
+    for iface in interfaces:
+        if isinstance(iface, Mapping) and iface.get("active_route") and (a := _addr(iface)):
+            return a
+    for iface in interfaces:
+        if (a := _addr(iface)):
+            return a
     return ""
 
 
-def _is_verified_for_key(
-    list_response: dict[str, Any], public_key_b64: str
-) -> bool:
-    """Return True if list_authorized_clients shows our key as VERIFIED."""
-    payload = list_response.get("response", list_response)
-    clients: Any = payload.get("authorized_clients") if isinstance(payload, Mapping) else None
-    if not isinstance(clients, list):
-        # Some firmwares wrap the list a layer deeper.
-        for value in (payload or {}).values() if isinstance(payload, Mapping) else ():
-            if isinstance(value, list):
-                clients = value
-                break
-    if not isinstance(clients, list):
-        return False
-    for client in clients:
+def _normalize_b64(value: Any) -> str:
+    return "".join(value.split()) if isinstance(value, str) else ""
+
+
+def _iter_clients(payload: Any) -> list[Any]:
+    if isinstance(payload, list):
+        return payload
+    if not isinstance(payload, Mapping):
+        return []
+    for key in ("authorized_clients", "authorizedClients", "clients", "response"):
+        if key in payload:
+            found = _iter_clients(payload[key])
+            if found:
+                return found
+    for value in payload.values():
+        if isinstance(value, (list, Mapping)):
+            found = _iter_clients(value)
+            if found:
+                return found
+    return []
+
+
+_VERIFIED_VALUES: tuple[Any, ...] = (
+    AuthorizedClientState.VERIFIED,
+    int(AuthorizedClientState.VERIFIED),
+    "VERIFIED",
+    "AUTHORIZED_CLIENT_STATE_VERIFIED",
+)
+
+
+def _find_client_for_key(list_response: Any, public_key_b64: str) -> Mapping[str, Any] | None:
+    target = _normalize_b64(public_key_b64)
+    for client in _iter_clients(list_response):
         if not isinstance(client, Mapping):
             continue
-        key = client.get("public_key") or client.get("publicKey")
-        if not key or key != public_key_b64:
-            continue
-        state = client.get("state") or client.get("authorized_client_state")
-        if state in (
-            AuthorizedClientState.VERIFIED,
-            int(AuthorizedClientState.VERIFIED),
-            "VERIFIED",
-            "AUTHORIZED_CLIENT_STATE_VERIFIED",
-        ):
-            return True
-    return False
+        key = client.get("public_key") or client.get("publicKey") or ""
+        if _normalize_b64(key) == target:
+            return client
+    return None
 
 
-class OAuth2FlowHandler(
-    config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=DOMAIN
-):
-    """Config flow to handle Powerwall V1R OAuth2 authentication and pairing."""
+def _is_verified(client: Mapping[str, Any] | None) -> bool:
+    if client is None:
+        return False
+    state = client.get("state") or client.get("authorized_client_state")
+    return state in _VERIFIED_VALUES
 
-    DOMAIN = DOMAIN
+
+class PowerwallV1RConfigFlow(ConfigFlow, domain=DOMAIN):
+    """Config flow for Powerwall V1R, backed by an existing Teslemetry entry."""
+
     VERSION = 1
 
     def __init__(self) -> None:
-        """Initialize config flow state."""
-        super().__init__()
-        self._token_data: dict[str, Any] = {}
-        self._region: Region = "na"
-        self._fleet: TeslaFleetApi | None = None
+        self._parent_entry: TeslemetryConfigEntry | None = None
         self._key_pem: bytes | None = None
-        self._sites_remaining: list[dict[str, Any]] = []
-        self._pending: list[dict[str, Any]] = []
-        self._pair_attempt = 0
+        self._public_key_b64: str = ""
+        self._public_key_der: bytes = b""
+        self._site: dict[str, Any] | None = None
 
-    @property
-    def logger(self) -> logging.Logger:
-        """Return logger."""
-        return LOGGER
+    # ----- account / site selection ----------------------------------------------
+
+    def _loaded_parents(self) -> list[TeslemetryConfigEntry]:
+        return [
+            e
+            for e in self.hass.config_entries.async_entries("teslemetry")
+            if e.state is ConfigEntryState.LOADED
+        ]
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Auto-import the client credential, then start OAuth."""
-        if CLIENT_ID:
-            await async_import_client_credential(
-                self.hass,
-                DOMAIN,
-                ClientCredential(CLIENT_ID, "", name="Powerwall V1R"),
-            )
-        return await super().async_step_user(user_input)
+        parents = self._loaded_parents()
+        if not parents:
+            return self.async_abort(reason="teslemetry_not_loaded")
 
-    async def async_oauth_create_entry(
-        self, data: dict[str, Any]
-    ) -> ConfigFlowResult:
-        """Discover energy sites and start the per-site flow."""
-        self._token_data = data
-        access_token = data["token"]["access_token"]
-        session = async_get_clientsession(self.hass)
-
-        try:
-            region = region_from_token(access_token)
-        except (KeyError, ValueError) as err:
-            LOGGER.error("Could not determine region from token: %s", err)
-            return self.async_abort(reason="oauth_error")
-        self._region = region
-
-        fleet = TeslaFleetApi(
-            session=session,
-            access_token=access_token,
-            region=region,
-            charging_scope=False,
-            partner_scope=False,
-            user_scope=False,
-            vehicle_scope=False,
-        )
-        self._fleet = fleet
-
-        try:
-            response = await fleet.products()
-        except InvalidRegion:
-            return self.async_abort(reason="oauth_error")
-        except InvalidToken:
-            return self.async_abort(reason="oauth_error")
-        except SubscriptionRequired:
-            return self.async_abort(reason="subscription_required")
-        except ClientConnectionError:
-            return self.async_abort(reason="cannot_connect")
-        except TeslaFleetError as err:
-            LOGGER.error("Fleet API error: %s", err)
-            return self.async_abort(reason="unknown")
-
-        products = response.get("response", []) or []
-        sites: list[dict[str, Any]] = []
-        for product in products:
-            site_id = product.get("energy_site_id")
-            if not site_id:
-                continue
-            site_name = (
-                product.get("site_name") or f"Energy Site {site_id}"
-            )
-            api_site: EnergySite = fleet.energySites.create(int(site_id))
-            host = ""
-            try:
-                networking = await api_site.get_networking_status()
-                host = _extract_host(networking)
-            except TeslaFleetError as err:
-                LOGGER.debug(
-                    "Networking status unavailable for site %s: %s",
-                    site_id,
-                    err,
-                )
-            sites.append(
-                {
-                    "site_id": int(site_id),
-                    "site_name": site_name,
-                    "host": host,
-                }
-            )
-
-        if not sites:
-            return self.async_abort(reason="no_sites")
-
-        # Reauth/Reconfigure: just refresh the token on the existing entry.
-        if self.source == SOURCE_REAUTH:
-            entry = self._get_reauth_entry()
-            new_data = {**entry.data, CONF_TOKEN: data, CONF_REGION: region}
-            return self.async_update_reload_and_abort(entry, data=new_data)
-        if self.source == SOURCE_RECONFIGURE:
-            entry = self._get_reconfigure_entry()
-            new_data = {**entry.data, CONF_TOKEN: data, CONF_REGION: region}
-            return self.async_update_reload_and_abort(entry, data=new_data)
-
-        self._sites_remaining = sites
-        return await self.async_step_password()
-
-    async def async_step_password(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Prompt for the gateway password for each discovered site."""
-        if not self._sites_remaining:
-            if not self._pending:
-                return self.async_abort(reason="no_sites")
-            return await self.async_step_pair_install()
-
-        site = self._sites_remaining[0]
+        if len(parents) == 1:
+            self._parent_entry = parents[0]
+            return await self.async_step_pick_site()
 
         if user_input is not None:
-            password = (user_input.get(CONF_GATEWAY_PASSWORD) or "").strip()
-            host = (user_input.get(CONF_GATEWAY_HOST) or site["host"]).strip()
-            self._sites_remaining.pop(0)
-            if password:
-                self._pending.append(
-                    {
-                        "site_id": site["site_id"],
-                        "site_name": site["site_name"],
-                        "host": host,
-                        "password": password,
-                        "paired": False,
-                        "lan_ok": False,
-                    }
-                )
-            return await self.async_step_password()
+            self._parent_entry = self.hass.config_entries.async_get_entry(
+                user_input[CONF_PARENT_ENTRY_ID]
+            )
+            if self._parent_entry is None:
+                return self.async_abort(reason="teslemetry_not_loaded")
+            return await self.async_step_pick_site()
 
-        schema = vol.Schema(
-            {
-                vol.Optional(CONF_GATEWAY_PASSWORD, default=""): str,
-                vol.Optional(CONF_GATEWAY_HOST, default=site["host"]): str,
-            }
-        )
         return self.async_show_form(
-            step_id="password",
-            data_schema=schema,
-            description_placeholders={"site_name": site["site_name"]},
+            step_id="user",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_PARENT_ENTRY_ID): vol.In(
+                        {e.entry_id: e.title for e in parents}
+                    )
+                }
+            ),
         )
 
-    async def async_step_pair_install(
+    async def async_step_pick_site(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Install the RSA public key on each pending site."""
-        assert self._fleet is not None
+        assert self._parent_entry is not None
+        energysites: list[TeslemetryEnergyData] = self._parent_entry.runtime_data.energysites
+        if not energysites:
+            return self.async_abort(reason="no_sites")
 
-        if self._key_pem is None:
-            try:
-                await self._fleet.get_rsa_private_key(
-                    self.hass.config.path(KEY_FILENAME)
-                )
-            except OSError as err:
-                LOGGER.error("Could not read/write RSA key: %s", err)
-                return self.async_abort(reason="unknown")
-            try:
-                self._key_pem = await self.hass.async_add_executor_job(
-                    Path(self.hass.config.path(KEY_FILENAME)).read_bytes
-                )
-            except OSError as err:
-                LOGGER.error("Could not read RSA key file: %s", err)
-                return self.async_abort(reason="unknown")
+        configured = {
+            e.data[CONF_ENERGY_SITE_ID]
+            for e in self.hass.config_entries.async_entries(DOMAIN)
+        }
+        available = [s for s in energysites if s.id not in configured]
+        if not available:
+            return self.async_abort(reason="already_configured")
 
-            for site in self._pending:
-                api_site: EnergySite = self._fleet.energySites.create(
-                site["site_id"]
+        if len(available) == 1:
+            return await self._select_site(available[0])
+
+        if user_input is not None:
+            chosen = next(
+                (s for s in available if str(s.id) == user_input[CONF_ENERGY_SITE_ID]),
+                None,
             )
-                try:
-                    await api_site.add_authorized_client(
-                        self._fleet.rsa_public_der_pkcs1,
-                        description="Powerwall V1R",
-                        key_type=AuthorizedClientKeyType.RSA,
-                        authorized_client_type=AuthorizedClientType.CUSTOMER_MOBILE_APP,
-                    )
-                except TeslaFleetError as err:
-                    LOGGER.error(
-                        "add_authorized_client failed for site %s: %s",
-                        site["site_id"],
-                        err,
-                    )
-                    return self.async_abort(reason="pair_install_failed")
+            if chosen is None:
+                return self.async_abort(reason="no_sites")
+            return await self._select_site(chosen)
+
+        choices = {str(s.id): self._site_label(s) for s in available}
+        return self.async_show_form(
+            step_id="pick_site",
+            data_schema=vol.Schema(
+                {vol.Required(CONF_ENERGY_SITE_ID): vol.In(choices)}
+            ),
+        )
+
+    async def _select_site(self, s: TeslemetryEnergyData) -> ConfigFlowResult:
+        await self.async_set_unique_id(str(s.id))
+        self._abort_if_unique_id_configured()
+        self._site = await self._site_meta(s)
+        if (aborted := await self._ensure_key_loaded()) is not None:
+            return aborted
+
+        try:
+            response = await self._site["api"].list_authorized_clients()
+        except TeslaFleetError as err:
+            LOGGER.warning(
+                "list_authorized_clients failed for site %s: %s", s.id, err
+            )
+            response = None
+
+        client = _find_client_for_key(response, self._public_key_b64)
+        if _is_verified(client):
+            # Already paired — skip the toggle prompt entirely.
+            return await self.async_step_credentials()
+
+        # Either absent, or present-but-unverified (the gateway only honours the
+        # toggle for ~2 minutes after install). Reinstall to get a fresh window.
+        try:
+            await self._site["api"].add_authorized_client(
+                self._public_key_der,
+                description="Powerwall V1R",
+                key_type=AuthorizedClientKeyType.RSA,
+                authorized_client_type=AuthorizedClientType.CUSTOMER_MOBILE_APP,
+            )
+        except TeslaFleetError as err:
+            LOGGER.error(
+                "add_authorized_client failed for site %s: %s", s.id, err
+            )
+            return self.async_abort(reason="pair_install_failed")
+
+        return await self.async_step_pair()
+
+    @staticmethod
+    def _site_label(s: TeslemetryEnergyData) -> str:
+        name = s.device.get("name") if s.device else None
+        return name or f"Energy Site {s.id}"
+
+    async def _site_meta(self, s: TeslemetryEnergyData) -> dict[str, Any]:
+        host = ""
+        try:
+            host = _extract_host(await s.api.get_networking_status())
+        except TeslaFleetError as err:
+            LOGGER.warning("Networking status unavailable for site %s: %s", s.id, err)
+        return {
+            "site_id": s.id,
+            "site_name": self._site_label(s),
+            "host": host,
+            "password": "",
+            "api": s.api,
+        }
+
+    # ----- key management --------------------------------------------------------
+
+    async def _ensure_key_loaded(self) -> ConfigFlowResult | None:
+        """Generate/load the RSA key file once and stash its public form."""
+        if self._key_pem is not None:
+            return None
+
+        session = async_get_clientsession(self.hass)
+        # access_token unused for key generation; pass a no-op coroutine.
+        keyholder = Teslemetry(session=session, access_token=_none)
+        try:
+            await keyholder.get_rsa_private_key(self.hass.config.path(KEY_FILENAME))
+            self._key_pem = await self.hass.async_add_executor_job(
+                Path(self.hass.config.path(KEY_FILENAME)).read_bytes
+            )
+        except OSError as err:
+            LOGGER.error("Could not read/write RSA key: %s", err)
+            return self.async_abort(reason="unknown")
+
+        self._public_key_b64 = keyholder.rsa_public_der_pkcs1_b64
+        self._public_key_der = keyholder.rsa_public_der_pkcs1
+        return None
+
+    # ----- credentials + pair + LAN verify (per site) ----------------------------
+
+    async def async_step_pair(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Prompt the user to toggle the gateway switch, then poll for VERIFIED."""
+        assert self._site is not None
+        site = self._site
 
         if user_input is None:
             return self.async_show_form(
-                step_id="pair_install",
+                step_id="pair",
                 data_schema=vol.Schema({}),
-                description_placeholders={
-                    "attempt": str(self._pair_attempt + 1)
-                },
+                description_placeholders={"site_name": site["site_name"]},
             )
-
-        return await self.async_step_pair_verify()
-
-    async def async_step_pair_verify(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Poll list_authorized_clients until each pending site is VERIFIED."""
-        assert self._fleet is not None
-
-        public_key_b64 = self._fleet.rsa_public_der_pkcs1_b64
 
         for _ in range(KEY_PAIRING_POLL_ATTEMPTS):
-            all_verified = True
-            for site in self._pending:
-                if site["paired"]:
-                    continue
-                api_site: EnergySite = self._fleet.energySites.create(
-                site["site_id"]
-            )
-                try:
-                    response = await api_site.list_authorized_clients()
-                except TeslaFleetError as err:
-                    LOGGER.debug(
-                        "list_authorized_clients error for site %s: %s",
-                        site["site_id"],
-                        err,
-                    )
-                    all_verified = False
-                    continue
-                if _is_verified_for_key(response, public_key_b64):
-                    site["paired"] = True
-                else:
-                    all_verified = False
-            if all_verified:
-                return await self.async_step_lan_verify()
+            try:
+                response = await site["api"].list_authorized_clients()
+            except TeslaFleetError:
+                response = None
+            if _is_verified(_find_client_for_key(response, self._public_key_b64)):
+                return await self.async_step_credentials()
             await asyncio.sleep(KEY_PAIRING_POLL_INTERVAL)
 
-        # Did not verify in this batch — let the user retry.
-        self._pair_attempt += 1
         return self.async_show_form(
-            step_id="pair_install",
+            step_id="pair",
             data_schema=vol.Schema({}),
             errors={"base": "pair_pending"},
-            description_placeholders={"attempt": str(self._pair_attempt + 1)},
+            description_placeholders={"site_name": site["site_name"]},
         )
 
-    async def async_step_lan_verify(
+    async def async_step_credentials(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Verify LAN connectivity to each paired site, then create entries."""
-        # Find the next site that hasn't been LAN-verified yet.
-        site = next((s for s in self._pending if not s["lan_ok"]), None)
-        if site is None:
-            return await self._async_finish_entries()
+        """Collect host + password and confirm the LAN connection works."""
+        assert self._site is not None
+        site = self._site
 
         errors: dict[str, str] = {}
         if user_input is not None:
-            site["password"] = user_input.get(
-                CONF_GATEWAY_PASSWORD, site["password"]
-            )
-            site["host"] = user_input.get(CONF_GATEWAY_HOST, site["host"])
-
-        from aiopowerwall import (  # noqa: PLC0415
-            PowerwallAuthenticationError,
-            PowerwallClient,
-            PowerwallConnectionError,
-        )
-
-        attempted = user_input is not None or site.get("auto_attempted") is None
-        site["auto_attempted"] = True
-
-        if attempted and site["host"] and self._key_pem is not None:
-            session = async_get_clientsession(self.hass)
-            try:
-                async with PowerwallClient(
-                    host=site["host"],
-                    gateway_password=site["password"],
-                    rsa_private_key_pem=self._key_pem,
-                    session=session,
-                ) as client:
-                    await client.connect()
-                site["lan_ok"] = True
-                return await self.async_step_lan_verify()
-            except PowerwallAuthenticationError:
+            password = (user_input.get(CONF_GATEWAY_PASSWORD) or "").strip()[-5:]
+            host = (user_input.get(CONF_GATEWAY_HOST) or "").strip()
+            if not password:
                 errors["base"] = "invalid_password"
-            except PowerwallConnectionError:
-                errors["base"] = "cannot_connect_local"
-            except Exception as err:  # noqa: BLE001
-                LOGGER.exception("Unexpected LAN verify error: %s", err)
-                errors["base"] = "unknown"
+            elif not host:
+                errors["base"] = "host_required"
+            else:
+                site["password"] = password
+                site["host"] = host
 
-        schema = vol.Schema(
-            {
-                vol.Required(
-                    CONF_GATEWAY_HOST, default=site["host"]
-                ): str,
-                vol.Required(
-                    CONF_GATEWAY_PASSWORD, default=site["password"]
-                ): str,
-            }
-        )
+                from aiopowerwall import (  # noqa: PLC0415
+                    PowerwallAuthenticationError,
+                    PowerwallClient,
+                    PowerwallConnectionError,
+                )
+
+                assert self._key_pem is not None
+                session = async_get_clientsession(self.hass)
+                try:
+                    async with PowerwallClient(
+                        host=host,
+                        gateway_password=password,
+                        rsa_private_key_pem=self._key_pem,
+                        session=session,
+                    ) as client:
+                        await client.connect()
+                    assert self._parent_entry is not None
+                    return self.async_create_entry(
+                        title=site["site_name"],
+                        data={
+                            CONF_PARENT_ENTRY_ID: self._parent_entry.entry_id,
+                            CONF_ENERGY_SITE_ID: site["site_id"],
+                            CONF_GATEWAY_HOST: host,
+                            CONF_GATEWAY_PASSWORD: password,
+                            "site_name": site["site_name"],
+                        },
+                    )
+                except PowerwallAuthenticationError:
+                    errors["base"] = "invalid_password"
+                except PowerwallConnectionError as err:
+                    LOGGER.warning(
+                        "LAN verify site %s: %s failed: %s",
+                        site["site_id"],
+                        host,
+                        err,
+                    )
+                    errors["base"] = "cannot_connect_local"
+                except Exception as err:  # noqa: BLE001
+                    LOGGER.exception("Unexpected LAN verify error: %s", err)
+                    errors["base"] = "unknown"
+
         return self.async_show_form(
-            step_id="lan_verify",
-            data_schema=schema,
+            step_id="credentials",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_GATEWAY_HOST, default=site["host"]): str,
+                    vol.Required(CONF_GATEWAY_PASSWORD, default=site["password"]): str,
+                }
+            ),
             errors=errors,
             description_placeholders={"site_name": site["site_name"]},
         )
 
-    async def _async_finish_entries(self) -> ConfigFlowResult:
-        """Create one config entry per verified site."""
-        verified = [s for s in self._pending if s["lan_ok"]]
-        if not verified:
-            return self.async_abort(reason="no_sites")
 
-        first, *rest = verified
-        for site in rest:
-            self.hass.async_create_task(
-                self.hass.config_entries.flow.async_init(
-                    DOMAIN,
-                    context={"source": SOURCE_IMPORT},
-                    data=self._build_entry_data(site),
-                )
-            )
-
-        await self.async_set_unique_id(str(first["site_id"]))
-        self._abort_if_unique_id_configured()
-        return self.async_create_entry(
-            title=first["site_name"],
-            data=self._build_entry_data(first),
-        )
-
-    def _build_entry_data(self, site: dict[str, Any]) -> dict[str, Any]:
-        """Build the persisted data for a single site's config entry."""
-        return {
-            CONF_TOKEN: self._token_data,
-            CONF_REGION: self._region,
-            CONF_ENERGY_SITE_ID: site["site_id"],
-            CONF_GATEWAY_HOST: site["host"],
-            CONF_GATEWAY_PASSWORD: site["password"],
-            "site_name": site["site_name"],
-        }
-
-    async def async_step_import(
-        self, import_data: dict[str, Any]
-    ) -> ConfigFlowResult:
-        """Create a config entry from data dispatched by the parent flow."""
-        site_id = import_data[CONF_ENERGY_SITE_ID]
-        await self.async_set_unique_id(str(site_id))
-        self._abort_if_unique_id_configured()
-        title = import_data.get("site_name") or f"Energy Site {site_id}"
-        return self.async_create_entry(title=title, data=import_data)
-
-    async def async_step_reauth(
-        self, entry_data: Mapping[str, Any]
-    ) -> ConfigFlowResult:
-        """Handle reauth on token failure."""
-        return await self.async_step_reauth_confirm()
-
-    async def async_step_reauth_confirm(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Confirm reauth dialog."""
-        if user_input is None:
-            return self.async_show_form(
-                step_id="reauth_confirm",
-                description_placeholders={"name": "Powerwall V1R"},
-            )
-        return await super().async_step_user()
-
-    async def async_step_reconfigure(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Handle reconfiguration."""
-        return await self.async_step_user()
+async def _none() -> str | None:
+    return None

@@ -6,8 +6,8 @@
   "issue_tracker": "https://github.com/Teslemetry/powerwall-v1r/issues",
   "codeowners": ["@Teslemetry"],
   "config_flow": true,
-  "dependencies": ["application_credentials"],
-  "iot_class": "cloud_polling",
+  "dependencies": ["teslemetry"],
+  "iot_class": "local_polling",
   "integration_type": "hub",
-  "requirements": ["tesla-fleet-api==1.4.7"]
+  "requirements": ["tesla-fleet-api==1.4.7", "aiopowerwall==0.1.0"]
 }
