@@ -103,7 +103,7 @@ class StatusCoordinator(_BasePowerwallCoordinator[dict[str, Any]]):
         super().__init__(hass, entry, client, SCAN_STATUS_SECONDS)
 
     async def _fetch(self) -> dict[str, Any]:
-        return await self.client.get_status(force=True)
+        return await self.client.get_status()
 
 
 class MetersCoordinator(_BasePowerwallCoordinator[dict[str, Any]]):
@@ -176,7 +176,7 @@ class ConfigCoordinator(_BasePowerwallCoordinator[dict[str, Any]]):
         super().__init__(hass, entry, client, SCAN_CONFIG_SECONDS)
 
     async def _fetch(self) -> dict[str, Any]:
-        return await self.client.get_config(force=True)
+        return await self.client.get_config()
 
 
 class BackupEventsCoordinator(_BasePowerwallCoordinator[BackupEventsPayload]):

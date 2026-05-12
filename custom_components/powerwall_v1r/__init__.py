@@ -58,7 +58,7 @@ async def async_setup_entry(
 
     try:
         din = await client.connect()
-        firmware = await client.get_firmware_version()
+        firmware_details = await client.get_firmware_details()
     except PowerwallAuthenticationError as err:
         raise ConfigEntryAuthFailed(str(err)) from err
     except (PowerwallConnectionError, PowerwallError) as err:
@@ -83,7 +83,7 @@ async def async_setup_entry(
     entry.runtime_data = PowerwallRuntimeData(
         client=client,
         din=din,
-        firmware_version=firmware if isinstance(firmware, str) else None,
+        firmware_version=firmware_details["system"]["version"]["text"] or None,
         status=status,
         meters=meters,
         battery_soe=battery_soe,
