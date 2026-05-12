@@ -27,6 +27,7 @@ async def async_setup_entry(
             StormModeSwitch(runtime),
             GridServicesSwitch(runtime),
             ManualBackupSwitch(runtime),
+            GridConnectedSwitch(runtime),
         ]
     )
 
@@ -151,4 +152,37 @@ class ManualBackupSwitch(PowerwallV1REntity, SwitchEntity):
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         await self.runtime.client.cancel_max_backup()
+        await self.coordinator.async_request_refresh()
+
+
+class GridConnectedSwitch(PowerwallV1REntity, SwitchEntity):
+    """Connect or disconnect the gateway from the grid via the islanding contactor.
+
+    State reflects the actual contactor position (`islanding.contactorClosed`),
+    not the commanded state — local v1r will ACK the command even when the
+    gateway does not actuate the contactor, so the switch can snap back if the
+    request was not honoured.
+    """
+
+    def __init__(self, runtime: PowerwallRuntimeData) -> None:
+        super().__init__(
+            runtime,
+            runtime.status,
+            SwitchEntityDescription(
+                key="grid_connected",
+                translation_key="grid_connected",
+            ),
+        )
+
+    @property
+    def is_on(self) -> bool | None:
+        value = config_path(self.coordinator.data, "control", "islanding", "contactorClosed")
+        return value if isinstance(value, bool) else None
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self.runtime.client.reconnect_grid()
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self.runtime.client.go_off_grid()
         await self.coordinator.async_request_refresh()

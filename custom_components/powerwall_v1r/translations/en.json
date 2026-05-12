@@ -169,7 +169,8 @@
       "allow_grid_charging": { "name": "Allow grid charging" },
       "storm_mode": { "name": "Storm watch" },
       "grid_services": { "name": "Grid services" },
-      "manual_backup": { "name": "Manual backup" }
+      "manual_backup": { "name": "Manual backup" },
+      "grid_connected": { "name": "Grid connected" }
     }
   }
 }

@@ -143,6 +143,9 @@
       "meter_y_vl1n": { "name": "Meter Y voltage L1-N" },
       "meter_y_vl2n": { "name": "Meter Y voltage L2-N" },
       "meter_y_vl3n": { "name": "Meter Y voltage L3-N" }
+    },
+    "switch": {
+      "grid_connected": { "name": "Grid connected" }
     }
   }
 }
