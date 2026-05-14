@@ -1,10 +1,4238 @@
-get_din: 1707000-30-L--TG12520300269B
-get_config: {'vin': '1707000-30-L--TG12520300269B', 'meters': [{'location': 'site', 'type': 'synchrometerX', 'cts': [True, False, False, False], 'inverted': [False, False, False, False], 'connection': {'short_id': '1707000-30-L--TG12520300269B', 'device_serial': 'JBL24311Y2H06XsynchrometerX', 'https_conf': {}}}, {'location': 'none', 'type': 'synchrometerY', 'cts': [False, False, False, False], 'inverted': [False, False, False, False], 'connection': {'short_id': '1707000-30-L--TG12520300269B', 'device_serial': 'JBL24311Y2H06XsynchrometerY', 'https_conf': {}}, 'ct_voltage_references': {'ct1': 'Phase1', 'ct2': 'Phase2', 'ct3': 'Phase3'}}], 'battery_blocks': [{'vin': '1707000-30-L--TG12520300269B', 'max_current': 48, 'min_soe': 0, 'max_soe': 100, 'type': 'Powerwall3', 'can_connection': 'can1', 'phase': 'Phase1', 'pvi_power_status': 'on', 'battery_power_status': 'on', 'enable_inverter_battery_meter': True, 'enable_inverter_solar_meter': True, 'battery_expansions': [{'din': '1807000-20-B--TG125214002DF3'}, {'din': '1807000-20-B--TG1252580009ZX'}]}], 'evses': [{'din': '1529455-02-F--PGT25132049329'}], 'island_contactor_controller': {'type': 'sync', 'connection': {'can_connection': 'can0'}}, 'island_config': {'low_soe_limit': 0, 'jump_start_soe_threshold': 0, 'wait_for_solar_retry_soe': 0, 'max_frequency_shift_hz': 0.2}, 'dio': {}, 'site_info': {'net_meter_mode': 'battery_ok', 'customer_preferred_export_rule': 'battery_ok', 'battery_commission_date': '2026-04-22T12:07:43+10:00', 'backup_reserve_percent': 24, 'max_site_meter_power_ac': 14, 'min_site_meter_power_ac': -14, 'nominal_system_energy_ac': 40.5, 'nominal_system_power_ac': 11.04, 'on_grid_solar_curtailment_enabled': True, 'phase_usages': {'phase1': 'Backup', 'phase2': 'NotConfigured', 'phase3': 'NotConfigured'}, 'grid_code': '50Hz_230V_1_SMC_ASNZS4777.2_2020_AUS_A', 'country': 'Australia', 'state': 'Queensland', 'distributor': 'Energex', 'utility': '*', 'retailer': '*', 'region': 'ASNZS4777.2:2020_AUS_A', 'site_name': 'Moorinya', 'timezone': 'Australia/Brisbane', 'ITC_cliff': 0}, 'strategy': {'control': 'lps', 'forecast_method': 'exm1dmc', 'pv_forecast_method': 'exmMaax', 'TOU_mode': 'economic'}, 'default_real_mode': 'self_consumption', 'enable_inverter_meter_readings': True, 'freq_support_parameters': {'target_soe': 0, 'low_soe_limit': 0, 'high_soe_limit': 0, 'offset_gain': 0, 'max_charge_power_offset': 0, 'max_discharge_power_offset': 0}, 'logging': {'datapump_log_rate_ms': 2000}, 'installer': {'email': 'ben@onepower.com.au', 'customer_id': '4cd3bb6d-61d4-47c6-95b1-120ff7c7e9eb', 'company': 'One Power Solar Pty Ltd', 'solar_installation_type': 'PV Panel', 'run_sitemaster': True, 'verified_config': True}, 'customer': {'registered': True}, 'auto_meter_update': True, 'bridge_inverter': {'enabled': False, 'end_time': '0001-01-01T00:00:00Z'}, 'test_timers': {}}
-get_status: {'control': {'alerts': {'active': ['SystemConnectedToGrid', 'FWUpdateFailed']}, 'batteryBlocks': [{'din': '1707000-30-L--TG12520300269B', 'disableReasons': []}], 'islanding': {'contactorClosed': True, 'customerIslandMode': 'BACKUP', 'gridOK': True, 'microGridOK': True}, 'meterAggregates': [{'location': 'BATTERY', 'realPowerW': 1}, {'location': 'SITE', 'realPowerW': -6994}, {'location': 'LOAD', 'realPowerW': 864.7500000000001}, {'location': 'SOLAR', 'realPowerW': 7860}, {'location': 'SOLAR_RGM', 'realPowerW': 0}, {'location': 'GENERATOR', 'realPowerW': 0}, {'location': 'CONDUCTOR', 'realPowerW': 0}], 'pvInverters': [], 'siteShutdown': {'isShutDown': False, 'reasons': []}, 'systemStatus': {'nominalEnergyRemainingWh': 43200, 'nominalFullPackEnergyWh': 43200}}, 'esCan': {'bus': {'ISLANDER': {'ISLAND_AcMeasurements': {'ISLAND_FreqL1_Load': 49.97, 'ISLAND_FreqL1_Main': 49.96, 'ISLAND_FreqL2_Load': 49.96, 'ISLAND_FreqL2_Main': 49.96, 'ISLAND_FreqL3_Load': 49.97, 'ISLAND_FreqL3_Main': 49.97, 'ISLAND_GridState': 'ISLAND_GridState_Grid_Compliant', 'ISLAND_VL1N_Load': 240, 'ISLAND_VL1N_Main': 241.5, 'ISLAND_VL2N_Load': 7.5, 'ISLAND_VL2N_Main': 7.5, 'ISLAND_VL3N_Load': 1.5, 'ISLAND_VL3N_Main': 0.5, 'isComplete': True, 'isMIA': False, 'lastRxTime': '2026-05-11T14:04:38+10:00'}, 'ISLAND_GridConnection': {'ISLAND_GridConnected': 'ISLAND_GridConnected_Connected', 'isComplete': True}}, 'MSA': {'METER_Z_AcMeasurements': {'METER_Z_CTA_I': 0, 'METER_Z_CTA_InstReactivePower': 0, 'METER_Z_CTA_InstRealPower': 0, 'METER_Z_CTB_I': 0, 'METER_Z_CTB_InstReactivePower': 0, 'METER_Z_CTB_InstRealPower': 0, 'METER_Z_VL1G': 0, 'METER_Z_VL2G': 0, 'isMIA': True, 'lastRxTime': '0001-01-01T00:00:00Z'}, 'MSA_InfoMsg': {'MSA_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'MSA_assemblyId': 0, 'isMIA': True}, 'MSA_Status': {'lastRxTime': '0001-01-01T00:00:00Z'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, 'PINV': [{'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}], 'POD': [{'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}], 'PVAC': [{'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}], 'PVS': [{'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}], 'SYNC': {'METER_X_AcMeasurements': {'METER_X_CTA_I': 29.604, 'METER_X_CTA_InstReactivePower': -795, 'METER_X_CTA_InstRealPower': -7003, 'METER_X_CTB_I': 0, 'METER_X_CTB_InstReactivePower': 0, 'METER_X_CTB_InstRealPower': 0, 'METER_X_CTC_I': 0, 'METER_X_CTC_InstReactivePower': 0, 'METER_X_CTC_InstRealPower': 0, 'METER_X_VL1N': 239.15, 'METER_X_VL2N': 7.44, 'METER_X_VL3N': 0.45, 'isComplete': True, 'isMIA': False, 'lastRxTime': '2026-05-11T14:04:38+10:00'}, 'METER_Y_AcMeasurements': {'METER_Y_CTA_I': 0, 'METER_Y_CTA_InstReactivePower': 0, 'METER_Y_CTA_InstRealPower': 0, 'METER_Y_CTB_I': 0, 'METER_Y_CTB_InstReactivePower': 0, 'METER_Y_CTB_InstRealPower': 0, 'METER_Y_CTC_I': 0, 'METER_Y_CTC_InstReactivePower': 0, 'METER_Y_CTC_InstRealPower': 0, 'METER_Y_VL1N': 237.97, 'METER_Y_VL2N': 7.42, 'METER_Y_VL3N': 1.46, 'isComplete': True, 'isMIA': False, 'lastRxTime': '2026-05-11T14:04:38+10:00'}, 'SYNC_InfoMsg': {'SYNC_appGitHash': [79, 146, 77, 232, 57, 240, 196], 'isMIA': False}, 'SYNC_Status': {'lastRxTime': '2026-05-11T14:04:38+10:00'}, 'packagePartNumber': '1493315-02-H', 'packageSerialNumber': 'JBL24311Y2H06X'}, 'THC': [{'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}]}, 'enumeration': None, 'firmwareUpdate': {'isUpdating': False, 'msa': None, 'powerwalls': None, 'pvInverters': None, 'sync': None}, 'inverterSelfTests': None, 'phaseDetection': None}, 'neurio': {'isDetectingWiredMeters': False, 'pairings': [], 'readings': []}, 'pw3Can': {'firmwareUpdate': {'isUpdating': False, 'progress': None}}, 'system': {'sitemanagerStatus': {'isRunning': True}, 'time': '2026-05-11T14:04:38+10:00', 'updateUrgencyCheck': None}}
-get_device_controller: {'components': {'msa': [{'activeAlerts': [{'name': 'SystemConnectedToGrid'}, {'name': 'FWUpdateFailed'}], 'partNumber': '1707000-30-L', 'serialNumber': 'TG12520300269B', 'signals': []}, {'activeAlerts': [{'name': 'SYNC_a001_SW_App_Boot'}, {'name': 'SYNC_a046_DoCloseArguments'}], 'partNumber': '1493315-02-H', 'serialNumber': 'JBL24311Y2H06X', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'MSA_pcbaId', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'MSA_usageId', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'MSA_appGitHash', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'MSA_HeatingRateOccurred', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTA_InstRealPower', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTA_InstReactivePower', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTA_I', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_VL1G', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTB_InstRealPower', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTB_InstReactivePower', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTB_I', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_VL2G', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'MSA_pcbaId', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'MSA_usageId', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'MSA_appGitHash', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'MSA_HeatingRateOccurred', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTA_InstRealPower', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTA_InstReactivePower', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTA_I', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_VL1G', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTB_InstRealPower', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTB_InstReactivePower', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_CTB_I', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'METER_Z_VL2G', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'PVAC_Fan_Speed_Actual_RPM', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'PVAC_Fan_Speed_Target_RPM', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'PVAC_Fan_Speed_Actual_RPM', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'PVAC_Fan_Speed_Target_RPM', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'PVAC_Fan_Speed_Actual_RPM', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'PVAC_Fan_Speed_Target_RPM', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'PVAC_Fan_Speed_Actual_RPM', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'PVAC_Fan_Speed_Target_RPM', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'PVAC_Fan_Speed_Actual_RPM', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'PVAC_Fan_Speed_Target_RPM', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'PVAC_Fan_Speed_Actual_RPM', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'PVAC_Fan_Speed_Target_RPM', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'PVAC_Fan_Speed_Actual_RPM', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'PVAC_Fan_Speed_Target_RPM', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'PVAC_Fan_Speed_Actual_RPM', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'PVAC_Fan_Speed_Target_RPM', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'THC_AmbientTemp', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': []}]}, 'control': {'alerts': {'active': ['SystemConnectedToGrid', 'FWUpdateFailed']}, 'batteryBlocks': [{'din': '1707000-30-L--TG12520300269B', 'disableReasons': []}], 'islanding': {'contactorClosed': True, 'customerIslandMode': 'BACKUP', 'disableReasons': [], 'gridOK': True, 'microGridOK': True}, 'meterAggregates': [{'location': 'BATTERY', 'realPowerW': 5}, {'location': 'SITE', 'realPowerW': -7015}, {'location': 'LOAD', 'realPowerW': 861.0000000000001}, {'location': 'SOLAR', 'realPowerW': 7876}, {'location': 'SOLAR_RGM', 'realPowerW': 0}, {'location': 'GENERATOR', 'realPowerW': 0}, {'location': 'CONDUCTOR', 'realPowerW': 0}], 'pvInverters': [], 'siteShutdown': {'isShutDown': False, 'reasons': []}, 'systemStatus': {'nominalEnergyRemainingWh': 43200, 'nominalFullPackEnergyWh': 43200}}, 'esCan': {'bus': {'ISLANDER': {'ISLAND_AcMeasurements': {'ISLAND_FreqL1_Load': 49.96, 'ISLAND_FreqL1_Main': 49.96, 'ISLAND_FreqL2_Load': 49.96, 'ISLAND_FreqL2_Main': 49.97, 'ISLAND_FreqL3_Load': 49.97, 'ISLAND_FreqL3_Main': 49.97, 'ISLAND_GridState': 'ISLAND_GridState_Grid_Compliant', 'ISLAND_VL1N_Load': 240, 'ISLAND_VL1N_Main': 241.5, 'ISLAND_VL2N_Load': 7.5, 'ISLAND_VL2N_Main': 7.5, 'ISLAND_VL3N_Load': 1.5, 'ISLAND_VL3N_Main': 0.5, 'isComplete': True, 'isMIA': False}, 'ISLAND_GridConnection': {'ISLAND_GridConnected': 'ISLAND_GridConnected_Connected', 'isComplete': True}}, 'PINV': [{'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PINV_AcMeasurements': {'PINV_VSplit1': 0, 'PINV_VSplit2': 0, 'isMIA': True}, 'PINV_PowerCapability': {'PINV_Pnom': 0, 'isComplete': False, 'isMIA': True}, 'PINV_Status': {'PINV_Fout': 0, 'PINV_GridState': 'Grid_Uncompliant', 'PINV_Pout': 0, 'PINV_State': 'PINV_Off', 'PINV_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}], 'POD': [{'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}, {'POD_EnergyStatus': {'POD_nom_energy_remaining': 0, 'POD_nom_full_pack_energy': 0, 'isMIA': True}, 'POD_InfoMsg': {'POD_appGitHash': [0, 0, 0, 0, 0, 0, 0]}}], 'PVAC': [{'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}, {'PVAC_InfoMsg': {'PVAC_appGitHash': [0, 0, 0, 0, 0, 0, 0]}, 'PVAC_Logging': {'PVAC_PVCurrent_A': 0, 'PVAC_PVCurrent_B': 0, 'PVAC_PVCurrent_C': 0, 'PVAC_PVCurrent_D': 0, 'PVAC_PVMeasuredVoltage_A': 0, 'PVAC_PVMeasuredVoltage_B': 0, 'PVAC_PVMeasuredVoltage_C': 0, 'PVAC_PVMeasuredVoltage_D': 0, 'PVAC_VL1Ground': 0, 'PVAC_VL2Ground': 0, 'isMIA': True}, 'PVAC_Status': {'PVAC_Fout': 0, 'PVAC_Pout': 0, 'PVAC_State': 'PVAC_Init', 'PVAC_Vout': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}, 'packagePartNumber': '', 'packageSerialNumber': '', 'subPackagePartNumber': '', 'subPackageSerialNumber': ''}], 'PVS': [{'PVS_Logging': {'PVS_numStringsLockoutBits': 0, 'PVS_sbsComplete': False}, 'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Logging': {'PVS_numStringsLockoutBits': 0, 'PVS_sbsComplete': False}, 'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Logging': {'PVS_numStringsLockoutBits': 0, 'PVS_sbsComplete': False}, 'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Logging': {'PVS_numStringsLockoutBits': 0, 'PVS_sbsComplete': False}, 'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Logging': {'PVS_numStringsLockoutBits': 0, 'PVS_sbsComplete': False}, 'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Logging': {'PVS_numStringsLockoutBits': 0, 'PVS_sbsComplete': False}, 'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Logging': {'PVS_numStringsLockoutBits': 0, 'PVS_sbsComplete': False}, 'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}, {'PVS_Logging': {'PVS_numStringsLockoutBits': 0, 'PVS_sbsComplete': False}, 'PVS_Status': {'PVS_SelfTestState': 'PVS_SelfTestOff', 'PVS_State': 'PVS_Off', 'PVS_StringA_Connected': False, 'PVS_StringB_Connected': False, 'PVS_StringC_Connected': False, 'PVS_StringD_Connected': False, 'PVS_vLL': 0, 'isMIA': True}, 'alerts': {'active': [], 'isComplete': False, 'isMIA': True}}], 'SYNC': {'METER_X_AcMeasurements': {'METER_X_CTA_I': 29.6725, 'METER_X_CTA_InstReactivePower': -790, 'METER_X_CTA_InstRealPower': -7015, 'METER_X_CTB_I': 0, 'METER_X_CTB_InstReactivePower': 0, 'METER_X_CTB_InstRealPower': 0, 'METER_X_CTC_I': 0, 'METER_X_CTC_InstReactivePower': 0, 'METER_X_CTC_InstRealPower': 0, 'METER_X_VL1N': 239.16, 'METER_X_VL2N': 7.44, 'METER_X_VL3N': 0.45, 'isComplete': True, 'isMIA': False}, 'METER_Y_AcMeasurements': {'METER_Y_CTA_I': 0, 'METER_Y_CTA_InstReactivePower': 0, 'METER_Y_CTA_InstRealPower': 0, 'METER_Y_CTB_I': 0, 'METER_Y_CTB_InstReactivePower': 0, 'METER_Y_CTB_InstRealPower': 0, 'METER_Y_CTC_I': 0, 'METER_Y_CTC_InstReactivePower': 0, 'METER_Y_CTC_InstRealPower': 0, 'METER_Y_VL1N': 237.98000000000002, 'METER_Y_VL2N': 7.42, 'METER_Y_VL3N': 1.46, 'isComplete': True, 'isMIA': False}, 'SYNC_InfoMsg': {'SYNC_appGitHash': [79, 146, 77, 232, 57, 240, 196], 'SYNC_assemblyId': 1, 'isMIA': False}, 'packagePartNumber': '1493315-02-H', 'packageSerialNumber': 'JBL24311Y2H06X'}, 'THC': [{'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}, {'THC_InfoMsg': {'THC_appGitHash': [0, 0, 0, 0, 0, 0, 0], 'isComplete': False, 'isMIA': True}, 'THC_Logging': {'THC_LOG_PW_2_0_EnableLineState': 'ENABLE_LINE_LOW'}, 'packagePartNumber': '', 'packageSerialNumber': ''}]}, 'enumeration': None, 'firmwareUpdate': {'isUpdating': False, 'msa': None, 'msa1': None, 'powerwalls': None, 'pvInverters': None, 'sync': None}, 'inverterSelfTests': None, 'phaseDetection': None}, 'ieee20305': {'controls': None, 'longFormDeviceID': None, 'polledResources': None, 'registration': None}, 'neurio': {'isDetectingWiredMeters': False, 'pairings': [], 'readings': []}, 'pw3Can': {'enumeration': None, 'firmwareUpdate': {'isUpdating': False, 'progress': None}}, 'system': {'sitemanagerStatus': {'isRunning': True}, 'supportMode': {'remoteService': {'expiryTime': '2026-08-07T14:44:04+10:00', 'isEnabled': True, 'sessionId': '7f20c9fb-4457-47fa-8d5a-50588ffdd51c'}}, 'time': '2026-05-11T14:04:38+10:00', 'updateUrgencyCheck': None}, 'teslaRemoteMeter': {'detectedWired': [], 'meters': []}}
-get_components: {'components': {'baggr': [{'activeAlerts': [{'name': 'BAGGR_a007_EndOfCharge'}], 'signals': [{'boolValue': None, 'name': 'BAGGR_State', 'textValue': 'BAGGR_ACTIVE', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'BAGGR_OperationRequest', 'textValue': 'BAGGR_NORMAL_OPERATION', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'BAGGR_NumBatteriesConnected', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 3}, {'boolValue': None, 'name': 'BAGGR_NumBatteriesPresent', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 3}, {'boolValue': None, 'name': 'BAGGR_NumBatteriesExpected', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 3}, {'boolValue': None, 'name': 'BAGGR_LOG_BattConnectionStatus0', 'textValue': 'CONNECTED', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'BAGGR_LOG_BattConnectionStatus1', 'textValue': 'CONNECTED', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'BAGGR_LOG_BattConnectionStatus2', 'textValue': 'CONNECTED', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'BAGGR_LOG_BattConnectionStatus3', 'textValue': 'NOT_TARGETED_NOT_PRESENT', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}]}], 'bms': [{'activeAlerts': [], 'signals': [{'boolValue': None, 'name': 'BMS_nominalEnergyRemaining', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 14.22}, {'boolValue': None, 'name': 'BMS_nominalFullPackEnergy', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 14.42}, {'boolValue': None, 'name': 'BMS_appGitHash', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'signals': [{'boolValue': None, 'name': 'BMS_nominalEnergyRemaining', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 14.22}, {'boolValue': None, 'name': 'BMS_nominalFullPackEnergy', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 14.42}, {'boolValue': None, 'name': 'BMS_appGitHash', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [], 'signals': [{'boolValue': None, 'name': 'BMS_nominalEnergyRemaining', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 14.18}, {'boolValue': None, 'name': 'BMS_nominalFullPackEnergy', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 14.38}, {'boolValue': None, 'name': 'BMS_appGitHash', 'textValue': None, 'timestamp': None, 'value': None}]}, {'activeAlerts': [{'name': 'BMS_a037_SW_NVRAM_Config_Error'}, {'name': 'BMS_a048_SW_HVP_HVI_Comms'}, {'name': 'BMS_a083_Nvram_Filecache'}], 'signals': [{'boolValue': None, 'name': 'BMS_nominalEnergyRemaining', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'BMS_nominalFullPackEnergy', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'BMS_appGitHash', 'textValue': None, 'timestamp': None, 'value': None}]}], 'hvp': [{'activeAlerts': [], 'partNumber': '1800420-11-F', 'serialNumber': 'TG1252040013Y5', 'signals': [{'boolValue': None, 'name': 'HVP_State', 'textValue': 'HVP_ACTIVE', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'HVP_appGitHash', 'textValue': '04d5dd98fb2037', 'timestamp': '2026-05-11T14:04:32+10:00', 'value': None}]}, {'activeAlerts': [], 'partNumber': '1807000-20-B', 'serialNumber': 'TG125214002DF3', 'signals': [{'boolValue': None, 'name': 'HVP_State', 'textValue': 'HVP_ACTIVE', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'HVP_appGitHash', 'textValue': '04d5dd98fb2037', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}]}, {'activeAlerts': [], 'partNumber': '1807000-20-B', 'serialNumber': 'TG1252580009ZX', 'signals': [{'boolValue': None, 'name': 'HVP_State', 'textValue': 'HVP_ACTIVE', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'HVP_appGitHash', 'textValue': '04d5dd98fb2037', 'timestamp': '2026-05-11T14:04:31+10:00', 'value': None}]}, {'activeAlerts': [], 'partNumber': '', 'serialNumber': '', 'signals': [{'boolValue': None, 'name': 'HVP_State', 'textValue': None, 'timestamp': None, 'value': None}, {'boolValue': None, 'name': 'HVP_appGitHash', 'textValue': None, 'timestamp': None, 'value': None}]}], 'pch': [{'activeAlerts': [], 'signals': [{'boolValue': None, 'name': 'PCH_State', 'textValue': 'Pch_Active', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_PvState_A', 'textValue': 'Pv_Active', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_PvState_B', 'textValue': 'Pv_Active_Parallel', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_PvState_C', 'textValue': 'Pv_Active', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_PvState_D', 'textValue': 'Pv_Active_Parallel', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_PvState_E', 'textValue': 'Pv_Active', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_PvState_F', 'textValue': 'Pv_Active_Parallel', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_AcFrequency', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 49.96}, {'boolValue': None, 'name': 'PCH_AcVoltageAB', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 239.60000000000002}, {'boolValue': None, 'name': 'PCH_AcVoltageAN', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 119.4}, {'boolValue': None, 'name': 'PCH_AcVoltageBN', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 120.2}, {'boolValue': None, 'name': 'PCH_packagePartNumber_1_7', 'textValue': '30303038353731', 'timestamp': '2026-05-11T14:04:33+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_packagePartNumber_8_14', 'textValue': '00004a2d33312d', 'timestamp': '2026-05-11T14:04:34+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_packagePartNumber_15_20', 'textValue': '000000000000', 'timestamp': '2026-05-11T14:04:35+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_packageSerialNumber_1_7', 'textValue': '38313532495446', 'timestamp': '2026-05-11T14:04:36+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_packageSerialNumber_8_14', 'textValue': '49493730303033', 'timestamp': '2026-05-11T14:04:37+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_PvVoltageA', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 470}, {'boolValue': None, 'name': 'PCH_PvVoltageB', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 468}, {'boolValue': None, 'name': 'PCH_PvVoltageC', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 452}, {'boolValue': None, 'name': 'PCH_PvVoltageD', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 452}, {'boolValue': None, 'name': 'PCH_PvVoltageE', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 0}, {'boolValue': None, 'name': 'PCH_PvVoltageF', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 0}, {'boolValue': None, 'name': 'PCH_PvCurrentA', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 4.35}, {'boolValue': None, 'name': 'PCH_PvCurrentB', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 4.35}, {'boolValue': None, 'name': 'PCH_PvCurrentC', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 4.25}, {'boolValue': None, 'name': 'PCH_PvCurrentD', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 4.2}, {'boolValue': None, 'name': 'PCH_PvCurrentE', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': -3.608224830031759e-16}, {'boolValue': None, 'name': 'PCH_PvCurrentF', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': -3.608224830031759e-16}, {'boolValue': None, 'name': 'PCH_BatteryPower', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 130}, {'boolValue': None, 'name': 'PCH_AcRealPowerAB', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 7880}, {'boolValue': None, 'name': 'PCH_SlowPvPowerSum', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 7884}, {'boolValue': None, 'name': 'PCH_AcMode', 'textValue': 'AcMode_GridFollowing', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_AcFrequency', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': 49.96}, {'boolValue': None, 'name': 'PCH_DcdcState_A', 'textValue': 'Dcdc_Active', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_DcdcState_B', 'textValue': 'Dcdc_Active', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PCH_appGitHash', 'textValue': '4f924de839f0c4', 'timestamp': '2026-05-11T14:04:30+10:00', 'value': None}]}], 'pws': [{'activeAlerts': [{'name': 'PWS_a078_AfciSvmTriggered'}], 'signals': [{'boolValue': None, 'name': 'PWS_SelfTest', 'textValue': 'SELFTEST_STATE_DONE', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PWS_PeImpTestState', 'textValue': 'PE_IMPEDANCE_DONE', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PWS_PvIsoTestState', 'textValue': 'PV_ISOLATION_DONE', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PWS_RelaySelfTest_State', 'textValue': 'RELAY_SELFTEST_DONE', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PWS_MciTestState', 'textValue': 'MCI_MODULE_TEST_STANDBY', 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}, {'boolValue': None, 'name': 'PWS_appGitHash', 'textValue': '04d5dd98fb2037', 'timestamp': '2026-05-11T14:04:30+10:00', 'value': None}, {'boolValue': True, 'name': 'PWS_ProdSwitch_State', 'textValue': None, 'timestamp': '2026-05-11T14:04:38+10:00', 'value': None}]}]}, 'pw3Can': {'firmwareUpdate': {'isUpdating': False, 'progress': None}}}
-get_firmware_version: 26.10.3 4f924de8
-get_meters_aggregates: {'site': {'last_communication_time': '2026-05-11T14:04:39.453397+10:00', 'instant_power': -7052, 'instant_reactive_power': -737, 'instant_apparent_power': 7090.407111019789, 'frequency': 0, 'energy_exported': 390545.61000518815, 'energy_imported': 4089.612880426319, 'instant_average_voltage': 239.16, 'instant_average_current': 29.642500000000002, 'i_a_current': 0, 'i_b_current': 0, 'i_c_current': 0, 'last_phase_voltage_communication_time': '0001-01-01T00:00:00Z', 'last_phase_power_communication_time': '0001-01-01T00:00:00Z', 'last_phase_energy_communication_time': '0001-01-01T00:00:00Z', 'timeout': 60000000000, 'num_meters_aggregated': 1, 'instant_total_current': 29.642500000000002}, 'battery': {'last_communication_time': '2026-05-11T14:04:39.451684+10:00', 'instant_power': 6, 'instant_reactive_power': -125, 'instant_apparent_power': 125.14391715141412, 'frequency': 49.9675, 'energy_exported': 212229.00000000844, 'energy_imported': 249301.00000000806, 'instant_average_voltage': 239.8, 'instant_average_current': 0, 'i_a_current': 0, 'i_b_current': 0, 'i_c_current': 0, 'last_phase_voltage_communication_time': '0001-01-01T00:00:00Z', 'last_phase_power_communication_time': '0001-01-01T00:00:00Z', 'last_phase_energy_communication_time': '0001-01-01T00:00:00Z', 'timeout': 60000000000, 'num_meters_aggregated': 1, 'instant_total_current': 0}, 'load': {'last_communication_time': '2026-05-11T14:04:39.451684+10:00', 'instant_power': 861.2500000000001, 'instant_reactive_power': -861.7500000000001, 'instant_apparent_power': 1218.3450352835196, 'frequency': 0, 'energy_exported': 0, 'energy_imported': 442971.0028752386, 'instant_average_voltage': 239.16, 'instant_average_current': 3.601145676534538, 'i_a_current': 0, 'i_b_current': 0, 'i_c_current': 0, 'last_phase_voltage_communication_time': '0001-01-01T00:00:00Z', 'last_phase_power_communication_time': '0001-01-01T00:00:00Z', 'last_phase_energy_communication_time': '0001-01-01T00:00:00Z', 'timeout': 60000000000, 'instant_total_current': 3.601145676534538}, 'solar': {'last_communication_time': '2026-05-11T14:04:39.473394979+10:00', 'instant_power': 7901, 'instant_reactive_power': 0, 'instant_apparent_power': 7901, 'frequency': 49.9675, 'energy_exported': 866499, 'energy_imported': 0, 'instant_average_voltage': 239.8, 'instant_average_current': 0, 'i_a_current': 0, 'i_b_current': 0, 'i_c_current': 0, 'last_phase_voltage_communication_time': '0001-01-01T00:00:00Z', 'last_phase_power_communication_time': '0001-01-01T00:00:00Z', 'last_phase_energy_communication_time': '0001-01-01T00:00:00Z', 'timeout': 60000000000, 'num_meters_aggregated': 1, 'instant_total_current': 0}}
-get_battery_soe: 100.0
-get_grid_status: SystemGridConnected
-get_backup_events: {'manual_backup': None, 'backup_events': []}
+connect: OK din=1707000-30-L--TG12520300269B
+---
+get_config:
+{
+  "vin": "1707000-30-L--TG12520300269B",
+  "meters": [
+    {
+      "location": "site",
+      "type": "synchrometerX",
+      "cts": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "inverted": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "connection": {
+        "short_id": "1707000-30-L--TG12520300269B",
+        "device_serial": "JBL24311Y2H06XsynchrometerX",
+        "https_conf": {}
+      }
+    },
+    {
+      "location": "none",
+      "type": "synchrometerY",
+      "cts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "inverted": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "connection": {
+        "short_id": "1707000-30-L--TG12520300269B",
+        "device_serial": "JBL24311Y2H06XsynchrometerY",
+        "https_conf": {}
+      },
+      "ct_voltage_references": {
+        "ct1": "Phase1",
+        "ct2": "Phase2",
+        "ct3": "Phase3"
+      }
+    }
+  ],
+  "battery_blocks": [
+    {
+      "vin": "1707000-30-L--TG12520300269B",
+      "max_current": 48,
+      "min_soe": 0,
+      "max_soe": 100,
+      "type": "Powerwall3",
+      "can_connection": "can1",
+      "phase": "Phase1",
+      "pvi_power_status": "on",
+      "battery_power_status": "on",
+      "enable_inverter_battery_meter": true,
+      "enable_inverter_solar_meter": true,
+      "battery_expansions": [
+        {
+          "din": "1807000-20-B--TG125214002DF3"
+        },
+        {
+          "din": "1807000-20-B--TG1252580009ZX"
+        }
+      ]
+    }
+  ],
+  "evses": [
+    {
+      "din": "1529455-02-F--PGT25132049329"
+    }
+  ],
+  "island_contactor_controller": {
+    "type": "sync",
+    "connection": {
+      "can_connection": "can0"
+    }
+  },
+  "island_config": {
+    "low_soe_limit": 0,
+    "jump_start_soe_threshold": 0,
+    "wait_for_solar_retry_soe": 0,
+    "max_frequency_shift_hz": 0.2
+  },
+  "dio": {},
+  "site_info": {
+    "net_meter_mode": "battery_ok",
+    "customer_preferred_export_rule": "battery_ok",
+    "battery_commission_date": "2026-04-22T12:07:43+10:00",
+    "backup_reserve_percent": 24,
+    "max_site_meter_power_ac": 14,
+    "min_site_meter_power_ac": -14,
+    "nominal_system_energy_ac": 40.5,
+    "nominal_system_power_ac": 11.04,
+    "on_grid_solar_curtailment_enabled": true,
+    "phase_usages": {
+      "phase1": "Backup",
+      "phase2": "NotConfigured",
+      "phase3": "NotConfigured"
+    },
+    "grid_code": "50Hz_230V_1_SMC_ASNZS4777.2_2020_AUS_A",
+    "country": "Australia",
+    "state": "Queensland",
+    "distributor": "Energex",
+    "utility": "*",
+    "retailer": "*",
+    "region": "ASNZS4777.2:2020_AUS_A",
+    "site_name": "Moorinya",
+    "timezone": "Australia/Brisbane",
+    "ITC_cliff": 0
+  },
+  "strategy": {
+    "control": "lps",
+    "forecast_method": "exm1dmc",
+    "pv_forecast_method": "exmMaax",
+    "TOU_mode": "economic"
+  },
+  "default_real_mode": "self_consumption",
+  "enable_inverter_meter_readings": true,
+  "freq_support_parameters": {
+    "target_soe": 0,
+    "low_soe_limit": 0,
+    "high_soe_limit": 0,
+    "offset_gain": 0,
+    "max_charge_power_offset": 0,
+    "max_discharge_power_offset": 0
+  },
+  "logging": {
+    "datapump_log_rate_ms": 2000
+  },
+  "installer": {
+    "email": "ben@onepower.com.au",
+    "customer_id": "4cd3bb6d-61d4-47c6-95b1-120ff7c7e9eb",
+    "company": "One Power Solar Pty Ltd",
+    "solar_installation_type": "PV Panel",
+    "run_sitemaster": true,
+    "verified_config": true
+  },
+  "customer": {
+    "registered": true
+  },
+  "auto_meter_update": true,
+  "bridge_inverter": {
+    "enabled": false,
+    "end_time": "0001-01-01T00:00:00Z"
+  },
+  "test_timers": {}
+}
+get_status:
+{
+  "control": {
+    "alerts": {
+      "active": [
+        "SystemConnectedToGrid",
+        "FWUpdateFailed"
+      ]
+    },
+    "batteryBlocks": [
+      {
+        "din": "1707000-30-L--TG12520300269B",
+        "disableReasons": []
+      }
+    ],
+    "islanding": {
+      "contactorClosed": true,
+      "customerIslandMode": "BACKUP",
+      "gridOK": true,
+      "microGridOK": true
+    },
+    "meterAggregates": [
+      {
+        "location": "BATTERY",
+        "realPowerW": 855
+      },
+      {
+        "location": "SITE",
+        "realPowerW": 6
+      },
+      {
+        "location": "LOAD",
+        "realPowerW": 855.2500000000001
+      },
+      {
+        "location": "SOLAR",
+        "realPowerW": 0
+      },
+      {
+        "location": "SOLAR_RGM",
+        "realPowerW": 0
+      },
+      {
+        "location": "GENERATOR",
+        "realPowerW": 0
+      },
+      {
+        "location": "CONDUCTOR",
+        "realPowerW": 0
+      }
+    ],
+    "pvInverters": [],
+    "siteShutdown": {
+      "isShutDown": false,
+      "reasons": []
+    },
+    "systemStatus": {
+      "nominalEnergyRemainingWh": 33650,
+      "nominalFullPackEnergyWh": 43200
+    }
+  },
+  "esCan": {
+    "bus": {
+      "ISLANDER": {
+        "ISLAND_AcMeasurements": {
+          "ISLAND_FreqL1_Load": 50.01,
+          "ISLAND_FreqL1_Main": 50.01,
+          "ISLAND_FreqL2_Load": 50.01,
+          "ISLAND_FreqL2_Main": 50.01,
+          "ISLAND_FreqL3_Load": 50.01,
+          "ISLAND_FreqL3_Main": 50.03,
+          "ISLAND_GridState": "ISLAND_GridState_Grid_Compliant",
+          "ISLAND_VL1N_Load": 239.5,
+          "ISLAND_VL1N_Main": 240.5,
+          "ISLAND_VL2N_Load": 7.5,
+          "ISLAND_VL2N_Main": 7.5,
+          "ISLAND_VL3N_Load": 1.5,
+          "ISLAND_VL3N_Main": 0.5,
+          "isComplete": true,
+          "isMIA": false,
+          "lastRxTime": "2026-05-12T20:56:13+10:00"
+        },
+        "ISLAND_GridConnection": {
+          "ISLAND_GridConnected": "ISLAND_GridConnected_Connected",
+          "isComplete": true
+        }
+      },
+      "MSA": {
+        "METER_Z_AcMeasurements": {
+          "METER_Z_CTA_I": 0,
+          "METER_Z_CTA_InstReactivePower": 0,
+          "METER_Z_CTA_InstRealPower": 0,
+          "METER_Z_CTB_I": 0,
+          "METER_Z_CTB_InstReactivePower": 0,
+          "METER_Z_CTB_InstRealPower": 0,
+          "METER_Z_VL1G": 0,
+          "METER_Z_VL2G": 0,
+          "isMIA": true,
+          "lastRxTime": "0001-01-01T00:00:00Z"
+        },
+        "MSA_InfoMsg": {
+          "MSA_appGitHash": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "MSA_assemblyId": 0,
+          "isMIA": true
+        },
+        "MSA_Status": {
+          "lastRxTime": "0001-01-01T00:00:00Z"
+        },
+        "packagePartNumber": "",
+        "packageSerialNumber": ""
+      },
+      "PINV": [
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        }
+      ],
+      "POD": [
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "PVAC": [
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        }
+      ],
+      "PVS": [
+        {
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        }
+      ],
+      "SYNC": {
+        "METER_X_AcMeasurements": {
+          "METER_X_CTA_I": 4.0965,
+          "METER_X_CTA_InstReactivePower": -721,
+          "METER_X_CTA_InstRealPower": -1,
+          "METER_X_CTB_I": 0,
+          "METER_X_CTB_InstReactivePower": 0,
+          "METER_X_CTB_InstRealPower": 0,
+          "METER_X_CTC_I": 0,
+          "METER_X_CTC_InstReactivePower": 0,
+          "METER_X_CTC_InstRealPower": 0,
+          "METER_X_VL1N": 238.53,
+          "METER_X_VL2N": 7.37,
+          "METER_X_VL3N": 0.44,
+          "isComplete": true,
+          "isMIA": false,
+          "lastRxTime": "2026-05-12T20:56:13+10:00"
+        },
+        "METER_Y_AcMeasurements": {
+          "METER_Y_CTA_I": 0,
+          "METER_Y_CTA_InstReactivePower": 0,
+          "METER_Y_CTA_InstRealPower": 0,
+          "METER_Y_CTB_I": 0,
+          "METER_Y_CTB_InstReactivePower": 0,
+          "METER_Y_CTB_InstRealPower": 0,
+          "METER_Y_CTC_I": 0,
+          "METER_Y_CTC_InstReactivePower": 0,
+          "METER_Y_CTC_InstRealPower": 0,
+          "METER_Y_VL1N": 237.35,
+          "METER_Y_VL2N": 7.3500000000000005,
+          "METER_Y_VL3N": 1.46,
+          "isComplete": true,
+          "isMIA": false,
+          "lastRxTime": "2026-05-12T20:56:13+10:00"
+        },
+        "SYNC_InfoMsg": {
+          "SYNC_appGitHash": [
+            79,
+            146,
+            77,
+            232,
+            57,
+            240,
+            196
+          ],
+          "isMIA": false
+        },
+        "SYNC_Status": {
+          "lastRxTime": "2026-05-12T20:56:13+10:00"
+        },
+        "packagePartNumber": "1493315-02-H",
+        "packageSerialNumber": "JBL24311Y2H06X"
+      },
+      "THC": [
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        }
+      ]
+    },
+    "enumeration": null,
+    "firmwareUpdate": {
+      "isUpdating": false,
+      "msa": null,
+      "powerwalls": null,
+      "pvInverters": null,
+      "sync": null
+    },
+    "inverterSelfTests": null,
+    "phaseDetection": null
+  },
+  "neurio": {
+    "isDetectingWiredMeters": false,
+    "pairings": [],
+    "readings": []
+  },
+  "pw3Can": {
+    "firmwareUpdate": {
+      "isUpdating": false,
+      "progress": null
+    }
+  },
+  "system": {
+    "sitemanagerStatus": {
+      "isRunning": true
+    },
+    "time": "2026-05-12T20:56:13+10:00",
+    "updateUrgencyCheck": null
+  }
+}
+get_device_controller:
+{
+  "components": {
+    "msa": [
+      {
+        "activeAlerts": [
+          {
+            "name": "SystemConnectedToGrid"
+          },
+          {
+            "name": "FWUpdateFailed"
+          }
+        ],
+        "partNumber": "1707000-30-L",
+        "serialNumber": "TG12520300269B",
+        "signals": []
+      },
+      {
+        "activeAlerts": [
+          {
+            "name": "SYNC_a001_SW_App_Boot"
+          },
+          {
+            "name": "SYNC_a046_DoCloseArguments"
+          }
+        ],
+        "partNumber": "1493315-02-H",
+        "serialNumber": "JBL24311Y2H06X",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "MSA_pcbaId",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "MSA_usageId",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "MSA_appGitHash",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "MSA_HeatingRateOccurred",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTA_InstRealPower",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTA_InstReactivePower",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTA_I",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_VL1G",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTB_InstRealPower",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTB_InstReactivePower",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTB_I",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_VL2G",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "MSA_pcbaId",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "MSA_usageId",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "MSA_appGitHash",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "MSA_HeatingRateOccurred",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTA_InstRealPower",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTA_InstReactivePower",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTA_I",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_VL1G",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTB_InstRealPower",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTB_InstReactivePower",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_CTB_I",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "METER_Z_VL2G",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Actual_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Target_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Actual_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Target_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Actual_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Target_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Actual_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Target_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Actual_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Target_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Actual_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Target_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Actual_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Target_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Actual_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PVAC_Fan_Speed_Target_RPM",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "THC_AmbientTemp",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": []
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "00000000000000000000",
+        "serialNumber": "TG1252040013Y5",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "BMS_nominalFullPackEnergy",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 14.42
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_nominalEnergyRemaining",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 10.540000000000001
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "00000000000000000000",
+        "serialNumber": "TG125214002DF3",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "BMS_nominalFullPackEnergy",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 14.42
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_nominalEnergyRemaining",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 11.83
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "00000000000000000000",
+        "serialNumber": "TG1252580009ZX",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "BMS_nominalFullPackEnergy",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:12+10:00",
+            "value": 14.38
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_nominalEnergyRemaining",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:12+10:00",
+            "value": 11.27
+          }
+        ]
+      },
+      {
+        "activeAlerts": [
+          {
+            "name": "BMS_a037_SW_NVRAM_Config_Error"
+          },
+          {
+            "name": "BMS_a048_SW_HVP_HVI_Comms"
+          },
+          {
+            "name": "BMS_a083_Nvram_Filecache"
+          }
+        ],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "BMS_nominalFullPackEnergy",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_nominalEnergyRemaining",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      }
+    ]
+  },
+  "control": {
+    "alerts": {
+      "active": [
+        "SystemConnectedToGrid",
+        "FWUpdateFailed"
+      ]
+    },
+    "batteryBlocks": [
+      {
+        "din": "1707000-30-L--TG12520300269B",
+        "disableReasons": []
+      }
+    ],
+    "islanding": {
+      "contactorClosed": true,
+      "customerIslandMode": "BACKUP",
+      "disableReasons": [],
+      "gridOK": true,
+      "microGridOK": true
+    },
+    "meterAggregates": [
+      {
+        "location": "BATTERY",
+        "realPowerW": 860
+      },
+      {
+        "location": "SITE",
+        "realPowerW": -1
+      },
+      {
+        "location": "LOAD",
+        "realPowerW": 858.0000000000001
+      },
+      {
+        "location": "SOLAR",
+        "realPowerW": 0
+      },
+      {
+        "location": "SOLAR_RGM",
+        "realPowerW": 0
+      },
+      {
+        "location": "GENERATOR",
+        "realPowerW": 0
+      },
+      {
+        "location": "CONDUCTOR",
+        "realPowerW": 0
+      }
+    ],
+    "pvInverters": [],
+    "siteShutdown": {
+      "isShutDown": false,
+      "reasons": []
+    },
+    "systemStatus": {
+      "nominalEnergyRemainingWh": 33650,
+      "nominalFullPackEnergyWh": 43200
+    }
+  },
+  "esCan": {
+    "bus": {
+      "ISLANDER": {
+        "ISLAND_AcMeasurements": {
+          "ISLAND_FreqL1_Load": 50.01,
+          "ISLAND_FreqL1_Main": 50.01,
+          "ISLAND_FreqL2_Load": 50.01,
+          "ISLAND_FreqL2_Main": 50.01,
+          "ISLAND_FreqL3_Load": 50.01,
+          "ISLAND_FreqL3_Main": 50.03,
+          "ISLAND_GridState": "ISLAND_GridState_Grid_Compliant",
+          "ISLAND_VL1N_Load": 239.5,
+          "ISLAND_VL1N_Main": 240.5,
+          "ISLAND_VL2N_Load": 7.5,
+          "ISLAND_VL2N_Main": 7.5,
+          "ISLAND_VL3N_Load": 1.5,
+          "ISLAND_VL3N_Main": 0.5,
+          "isComplete": true,
+          "isMIA": false
+        },
+        "ISLAND_GridConnection": {
+          "ISLAND_GridConnected": "ISLAND_GridConnected_Connected",
+          "isComplete": true
+        }
+      },
+      "PINV": [
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PINV_AcMeasurements": {
+            "PINV_VSplit1": 0,
+            "PINV_VSplit2": 0,
+            "isMIA": true
+          },
+          "PINV_PowerCapability": {
+            "PINV_Pnom": 0,
+            "isComplete": false,
+            "isMIA": true
+          },
+          "PINV_Status": {
+            "PINV_Fout": 0,
+            "PINV_GridState": "Grid_Uncompliant",
+            "PINV_Pout": 0,
+            "PINV_State": "PINV_Off",
+            "PINV_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        }
+      ],
+      "POD": [
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "POD_EnergyStatus": {
+            "POD_nom_energy_remaining": 0,
+            "POD_nom_full_pack_energy": 0,
+            "isMIA": true
+          },
+          "POD_InfoMsg": {
+            "POD_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "PVAC": [
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        },
+        {
+          "PVAC_InfoMsg": {
+            "PVAC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "PVAC_Logging": {
+            "PVAC_PVCurrent_A": 0,
+            "PVAC_PVCurrent_B": 0,
+            "PVAC_PVCurrent_C": 0,
+            "PVAC_PVCurrent_D": 0,
+            "PVAC_PVMeasuredVoltage_A": 0,
+            "PVAC_PVMeasuredVoltage_B": 0,
+            "PVAC_PVMeasuredVoltage_C": 0,
+            "PVAC_PVMeasuredVoltage_D": 0,
+            "PVAC_VL1Ground": 0,
+            "PVAC_VL2Ground": 0,
+            "isMIA": true
+          },
+          "PVAC_Status": {
+            "PVAC_Fout": 0,
+            "PVAC_Pout": 0,
+            "PVAC_State": "PVAC_Init",
+            "PVAC_Vout": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": "",
+          "subPackagePartNumber": "",
+          "subPackageSerialNumber": ""
+        }
+      ],
+      "PVS": [
+        {
+          "PVS_Logging": {
+            "PVS_numStringsLockoutBits": 0,
+            "PVS_sbsComplete": false
+          },
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Logging": {
+            "PVS_numStringsLockoutBits": 0,
+            "PVS_sbsComplete": false
+          },
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Logging": {
+            "PVS_numStringsLockoutBits": 0,
+            "PVS_sbsComplete": false
+          },
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Logging": {
+            "PVS_numStringsLockoutBits": 0,
+            "PVS_sbsComplete": false
+          },
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Logging": {
+            "PVS_numStringsLockoutBits": 0,
+            "PVS_sbsComplete": false
+          },
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Logging": {
+            "PVS_numStringsLockoutBits": 0,
+            "PVS_sbsComplete": false
+          },
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Logging": {
+            "PVS_numStringsLockoutBits": 0,
+            "PVS_sbsComplete": false
+          },
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        },
+        {
+          "PVS_Logging": {
+            "PVS_numStringsLockoutBits": 0,
+            "PVS_sbsComplete": false
+          },
+          "PVS_Status": {
+            "PVS_SelfTestState": "PVS_SelfTestOff",
+            "PVS_State": "PVS_Off",
+            "PVS_StringA_Connected": false,
+            "PVS_StringB_Connected": false,
+            "PVS_StringC_Connected": false,
+            "PVS_StringD_Connected": false,
+            "PVS_vLL": 0,
+            "isMIA": true
+          },
+          "alerts": {
+            "active": [],
+            "isComplete": false,
+            "isMIA": true
+          }
+        }
+      ],
+      "SYNC": {
+        "METER_X_AcMeasurements": {
+          "METER_X_CTA_I": 4.095,
+          "METER_X_CTA_InstReactivePower": -724,
+          "METER_X_CTA_InstRealPower": 2,
+          "METER_X_CTB_I": 0,
+          "METER_X_CTB_InstReactivePower": 0,
+          "METER_X_CTB_InstRealPower": 0,
+          "METER_X_CTC_I": 0,
+          "METER_X_CTC_InstReactivePower": 0,
+          "METER_X_CTC_InstRealPower": 0,
+          "METER_X_VL1N": 238.51,
+          "METER_X_VL2N": 7.37,
+          "METER_X_VL3N": 0.44,
+          "isComplete": true,
+          "isMIA": false
+        },
+        "METER_Y_AcMeasurements": {
+          "METER_Y_CTA_I": 0,
+          "METER_Y_CTA_InstReactivePower": 0,
+          "METER_Y_CTA_InstRealPower": 0,
+          "METER_Y_CTB_I": 0,
+          "METER_Y_CTB_InstReactivePower": 0,
+          "METER_Y_CTB_InstRealPower": 0,
+          "METER_Y_CTC_I": 0,
+          "METER_Y_CTC_InstReactivePower": 0,
+          "METER_Y_CTC_InstRealPower": 0,
+          "METER_Y_VL1N": 237.33,
+          "METER_Y_VL2N": 7.3500000000000005,
+          "METER_Y_VL3N": 1.46,
+          "isComplete": true,
+          "isMIA": false
+        },
+        "SYNC_InfoMsg": {
+          "SYNC_appGitHash": [
+            79,
+            146,
+            77,
+            232,
+            57,
+            240,
+            196
+          ],
+          "SYNC_assemblyId": 1,
+          "isMIA": false
+        },
+        "packagePartNumber": "1493315-02-H",
+        "packageSerialNumber": "JBL24311Y2H06X"
+      },
+      "THC": [
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        },
+        {
+          "THC_InfoMsg": {
+            "THC_appGitHash": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "isComplete": false,
+            "isMIA": true
+          },
+          "THC_Logging": {
+            "THC_LOG_PW_2_0_EnableLineState": "ENABLE_LINE_LOW"
+          },
+          "packagePartNumber": "",
+          "packageSerialNumber": ""
+        }
+      ]
+    },
+    "enumeration": null,
+    "firmwareUpdate": {
+      "isUpdating": false,
+      "msa": null,
+      "msa1": null,
+      "powerwalls": null,
+      "pvInverters": null,
+      "sync": null
+    },
+    "inverterSelfTests": null,
+    "phaseDetection": null
+  },
+  "ieee20305": {
+    "controls": null,
+    "longFormDeviceID": null,
+    "polledResources": null,
+    "registration": null
+  },
+  "neurio": {
+    "isDetectingWiredMeters": false,
+    "pairings": [],
+    "readings": []
+  },
+  "pw3Can": {
+    "enumeration": null,
+    "firmwareUpdate": {
+      "isUpdating": false,
+      "progress": null
+    }
+  },
+  "system": {
+    "sitemanagerStatus": {
+      "isRunning": true
+    },
+    "supportMode": {
+      "remoteService": {
+        "expiryTime": "2026-08-07T14:44:04+10:00",
+        "isEnabled": true,
+        "sessionId": "7f20c9fb-4457-47fa-8d5a-50588ffdd51c"
+      }
+    },
+    "time": "2026-05-12T20:56:13+10:00",
+    "updateUrgencyCheck": null
+  },
+  "teslaRemoteMeter": {
+    "detectedWired": [],
+    "meters": []
+  }
+}
+get_components:
+{
+  "components": {
+    "baggr": [
+      {
+        "activeAlerts": [],
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "BAGGR_State",
+            "textValue": "BAGGR_ACTIVE",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "BAGGR_OperationRequest",
+            "textValue": "BAGGR_NORMAL_OPERATION",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "BAGGR_NumBatteriesConnected",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 3
+          },
+          {
+            "boolValue": null,
+            "name": "BAGGR_NumBatteriesPresent",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 3
+          },
+          {
+            "boolValue": null,
+            "name": "BAGGR_NumBatteriesExpected",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 3
+          },
+          {
+            "boolValue": null,
+            "name": "BAGGR_LOG_BattConnectionStatus0",
+            "textValue": "CONNECTED",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "BAGGR_LOG_BattConnectionStatus1",
+            "textValue": "CONNECTED",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "BAGGR_LOG_BattConnectionStatus2",
+            "textValue": "CONNECTED",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "BAGGR_LOG_BattConnectionStatus3",
+            "textValue": "NOT_TARGETED_NOT_PRESENT",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          }
+        ]
+      }
+    ],
+    "bms": [
+      {
+        "activeAlerts": [],
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "BMS_nominalEnergyRemaining",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 10.540000000000001
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_nominalFullPackEnergy",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 14.42
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_appGitHash",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "BMS_nominalEnergyRemaining",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 11.83
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_nominalFullPackEnergy",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 14.42
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_appGitHash",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "BMS_nominalEnergyRemaining",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 11.27
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_nominalFullPackEnergy",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 14.38
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_appGitHash",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [
+          {
+            "name": "BMS_a037_SW_NVRAM_Config_Error"
+          },
+          {
+            "name": "BMS_a048_SW_HVP_HVI_Comms"
+          },
+          {
+            "name": "BMS_a083_Nvram_Filecache"
+          }
+        ],
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "BMS_nominalEnergyRemaining",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_nominalFullPackEnergy",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "BMS_appGitHash",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      }
+    ],
+    "hvp": [
+      {
+        "activeAlerts": [],
+        "partNumber": "1800420-11-F",
+        "serialNumber": "TG1252040013Y5",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "HVP_State",
+            "textValue": "HVP_ACTIVE",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "HVP_appGitHash",
+            "textValue": "04d5dd98fb2037",
+            "timestamp": "2026-05-12T20:55:58+10:00",
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "1807000-20-B",
+        "serialNumber": "TG125214002DF3",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "HVP_State",
+            "textValue": "HVP_ACTIVE",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "HVP_appGitHash",
+            "textValue": "04d5dd98fb2037",
+            "timestamp": "2026-05-12T20:56:04+10:00",
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "1807000-20-B",
+        "serialNumber": "TG1252580009ZX",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "HVP_State",
+            "textValue": "HVP_ACTIVE",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "HVP_appGitHash",
+            "textValue": "04d5dd98fb2037",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          }
+        ]
+      },
+      {
+        "activeAlerts": [],
+        "partNumber": "",
+        "serialNumber": "",
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "HVP_State",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "HVP_appGitHash",
+            "textValue": null,
+            "timestamp": null,
+            "value": null
+          }
+        ]
+      }
+    ],
+    "pch": [
+      {
+        "activeAlerts": [
+          {
+            "name": "PCH_a054_pwsDisabledMpptEnableLine"
+          }
+        ],
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PCH_State",
+            "textValue": "Pch_Active",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvState_A",
+            "textValue": "Pv_Standby",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvState_B",
+            "textValue": "Pv_Standby",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvState_C",
+            "textValue": "Pv_Standby",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvState_D",
+            "textValue": "Pv_Standby",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvState_E",
+            "textValue": "Pv_Standby",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvState_F",
+            "textValue": "Pv_Standby",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_AcFrequency",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 50.0025
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_AcVoltageAB",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 238.4
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_AcVoltageAN",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 118.80000000000001
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_AcVoltageBN",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 119.60000000000001
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_packagePartNumber_1_7",
+            "textValue": "30303038353731",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_packagePartNumber_8_14",
+            "textValue": "00004a2d33312d",
+            "timestamp": "2026-05-12T20:56:03+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_packagePartNumber_15_20",
+            "textValue": "000000000000",
+            "timestamp": "2026-05-12T20:56:04+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_packageSerialNumber_1_7",
+            "textValue": "38313532495446",
+            "timestamp": "2026-05-12T20:56:05+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_packageSerialNumber_8_14",
+            "textValue": "49493730303033",
+            "timestamp": "2026-05-12T20:56:06+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvVoltageA",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 28
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvVoltageB",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 28
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvVoltageC",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 24
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvVoltageD",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 24
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvVoltageE",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 16
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvVoltageF",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 16
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvCurrentA",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": -3.608224830031759e-16
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvCurrentB",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": -3.608224830031759e-16
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvCurrentC",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": -3.608224830031759e-16
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvCurrentD",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": -3.608224830031759e-16
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvCurrentE",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": -3.608224830031759e-16
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_PvCurrentF",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": -3.608224830031759e-16
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_BatteryPower",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 1020
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_AcRealPowerAB",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 880
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_SlowPvPowerSum",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 0
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_AcMode",
+            "textValue": "AcMode_GridFollowing",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_AcFrequency",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": 50.0025
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_DcdcState_A",
+            "textValue": "Dcdc_Active",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_DcdcState_B",
+            "textValue": "Dcdc_Active",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PCH_appGitHash",
+            "textValue": "4f924de839f0c4",
+            "timestamp": "2026-05-12T20:56:10+10:00",
+            "value": null
+          }
+        ]
+      }
+    ],
+    "pws": [
+      {
+        "activeAlerts": [],
+        "signals": [
+          {
+            "boolValue": null,
+            "name": "PWS_SelfTest",
+            "textValue": "SELFTEST_STATE_DONE",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PWS_PeImpTestState",
+            "textValue": "PE_IMPEDANCE_DONE",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PWS_PvIsoTestState",
+            "textValue": "PV_ISOLATION_DONE",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PWS_RelaySelfTest_State",
+            "textValue": "RELAY_SELFTEST_DONE",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PWS_MciTestState",
+            "textValue": "MCI_MODULE_TEST_STANDBY",
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          },
+          {
+            "boolValue": null,
+            "name": "PWS_appGitHash",
+            "textValue": "04d5dd98fb2037",
+            "timestamp": "2026-05-12T20:56:09+10:00",
+            "value": null
+          },
+          {
+            "boolValue": true,
+            "name": "PWS_ProdSwitch_State",
+            "textValue": null,
+            "timestamp": "2026-05-12T20:56:13+10:00",
+            "value": null
+          }
+        ]
+      }
+    ]
+  },
+  "pw3Can": {
+    "firmwareUpdate": {
+      "isUpdating": false,
+      "progress": null
+    }
+  }
+}
+get_firmware_details:
+{
+  "system": {
+    "gateway": {
+      "partNumber": "1707000-30-L",
+      "serialNumber": "TG12520300269B"
+    },
+    "din": "1707000-30-L--TG12520300269B",
+    "version": {
+      "text": "26.10.3 4f924de8",
+      "githash": "b'O\\x92M\\xe89\\xf0\\xc4\\xf6\\xf7\\xfd\\xa9\\x0f\\x01\\x0e\\xd9\\xf4\\x1b\\xfeU\\x99'"
+    },
+    "five": 1,
+    "six": 4,
+    "wireless": {
+      "device": []
+    }
+  }
+}
+get_meters_aggregates:
+{
+  "site": {
+    "last_communication_time": "2026-05-12T20:56:13.980864+10:00",
+    "instant_power": -2,
+    "instant_reactive_power": -726,
+    "instant_apparent_power": 726.0027548157101,
+    "frequency": 0,
+    "energy_exported": 406794.67836456315,
+    "energy_imported": 4305.788661676319,
+    "instant_average_voltage": 238.5,
+    "instant_average_current": 4.1035,
+    "i_a_current": 0,
+    "i_b_current": 0,
+    "i_c_current": 0,
+    "last_phase_voltage_communication_time": "0001-01-01T00:00:00Z",
+    "last_phase_power_communication_time": "0001-01-01T00:00:00Z",
+    "last_phase_energy_communication_time": "0001-01-01T00:00:00Z",
+    "timeout": 60000000000,
+    "num_meters_aggregated": 1,
+    "instant_total_current": 4.1035
+  },
+  "battery": {
+    "last_communication_time": "2026-05-12T20:56:13.956941+10:00",
+    "instant_power": 861,
+    "instant_reactive_power": 0,
+    "instant_apparent_power": 861,
+    "frequency": 50.0025,
+    "energy_exported": 239315.0000000094,
+    "energy_imported": 267368.000000009,
+    "instant_average_voltage": 238.4,
+    "instant_average_current": 0,
+    "i_a_current": 0,
+    "i_b_current": 0,
+    "i_c_current": 0,
+    "last_phase_voltage_communication_time": "0001-01-01T00:00:00Z",
+    "last_phase_power_communication_time": "0001-01-01T00:00:00Z",
+    "last_phase_energy_communication_time": "0001-01-01T00:00:00Z",
+    "timeout": 60000000000,
+    "num_meters_aggregated": 1,
+    "instant_total_current": 0
+  },
+  "load": {
+    "last_communication_time": "2026-05-12T20:56:13.956941+10:00",
+    "instant_power": 855.0000000000001,
+    "instant_reactive_power": -720,
+    "instant_apparent_power": 1117.77681135368,
+    "frequency": 0,
+    "energy_exported": 0,
+    "energy_imported": 484926.1102971136,
+    "instant_average_voltage": 238.5,
+    "instant_average_current": 3.584905660377359,
+    "i_a_current": 0,
+    "i_b_current": 0,
+    "i_c_current": 0,
+    "last_phase_voltage_communication_time": "0001-01-01T00:00:00Z",
+    "last_phase_power_communication_time": "0001-01-01T00:00:00Z",
+    "last_phase_energy_communication_time": "0001-01-01T00:00:00Z",
+    "timeout": 60000000000,
+    "instant_total_current": 3.584905660377359
+  },
+  "solar": {
+    "last_communication_time": "2026-05-12T20:56:13.973333647+10:00",
+    "instant_power": 0,
+    "instant_reactive_power": 0,
+    "instant_apparent_power": 0,
+    "frequency": 50.0025,
+    "energy_exported": 915468,
+    "energy_imported": 0,
+    "instant_average_voltage": 238.4,
+    "instant_average_current": 0,
+    "i_a_current": 0,
+    "i_b_current": 0,
+    "i_c_current": 0,
+    "last_phase_voltage_communication_time": "0001-01-01T00:00:00Z",
+    "last_phase_power_communication_time": "0001-01-01T00:00:00Z",
+    "last_phase_energy_communication_time": "0001-01-01T00:00:00Z",
+    "timeout": 60000000000,
+    "num_meters_aggregated": 1,
+    "instant_total_current": 0
+  }
+}
+get_battery_soe:
+77.89351851851852
+get_grid_status:
+"SystemGridConnected"
+get_backup_events:
+{
+  "manual_backup": null,
+  "backup_events": []
+}
+---

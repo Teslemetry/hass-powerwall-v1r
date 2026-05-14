@@ -32,6 +32,7 @@ from .const import (
     LOGGER,
     SCAN_BACKUP_EVENTS_SECONDS,
     SCAN_BATTERY_SOE_SECONDS,
+    SCAN_COMPONENTS_SECONDS,
     SCAN_CONFIG_SECONDS,
     SCAN_GRID_STATUS_SECONDS,
     SCAN_METERS_SECONDS,
@@ -39,6 +40,26 @@ from .const import (
 )
 
 type PowerwallV1RConfigEntry = ConfigEntry["PowerwallRuntimeData"]
+
+
+@dataclass(frozen=True)
+class MasterBlock:
+    """One Powerwall master and its expansions.
+
+    Mirrors a single entry in ``get_config['battery_blocks']``: the master
+    is the Powerwall that owns ``expansion_dins[]`` (which may be empty for
+    masters with no expansions installed). ``block_index`` is the position
+    in ``battery_blocks`` and is reused as the master's slot in the
+    components payload arrays (``bms[]``/``hvp[]``/``pch[]``/``baggr[]``).
+
+    For multi-master sites the stride between blocks in the components
+    arrays isn't yet confirmed from real captures, so callers should guard
+    on ``len(master_blocks) > 1`` and only act on index 0 for now.
+    """
+
+    block_index: int
+    device_din: str
+    expansion_dins: tuple[str, ...]
 
 
 @dataclass
@@ -54,6 +75,8 @@ class PowerwallRuntimeData:
     grid_status: GridStatusCoordinator
     config: ConfigCoordinator
     backup_events: BackupEventsCoordinator
+    components: ComponentsCoordinator
+    master_blocks: tuple[MasterBlock, ...]
 
 
 class _BasePowerwallCoordinator[T](DataUpdateCoordinator[T]):
@@ -194,3 +217,24 @@ class BackupEventsCoordinator(_BasePowerwallCoordinator[BackupEventsPayload]):
 
     async def _fetch(self) -> BackupEventsPayload:
         return await self.client.get_backup_events()
+
+
+class ComponentsCoordinator(_BasePowerwallCoordinator[dict[str, Any]]):
+    """Polls `get_components` for Powerwall 3 per-unit telemetry.
+
+    Returns per-component lists (`baggr`, `bms`, `hvp`, `pch`, `pws`) where
+    list index 0 is the master and 1+ are battery expansions.
+    """
+
+    _label = "components"
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        entry: PowerwallV1RConfigEntry,
+        client: PowerwallClient,
+    ) -> None:
+        super().__init__(hass, entry, client, SCAN_COMPONENTS_SECONDS)
+
+    async def _fetch(self) -> dict[str, Any]:
+        return await self.client.get_components()

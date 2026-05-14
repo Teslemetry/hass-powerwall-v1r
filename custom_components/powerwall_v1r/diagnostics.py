@@ -26,7 +26,14 @@ async def async_get_config_entry_diagnostics(
         },
         "din": runtime.din,
         "firmware_version": runtime.firmware_version,
-        "expansion_dins": list(runtime.expansion_dins),
+        "master_blocks": [
+            {
+                "block_index": block.block_index,
+                "device_din": block.device_din,
+                "expansion_dins": list(block.expansion_dins),
+            }
+            for block in runtime.master_blocks
+        ],
         "coordinators": {
             "status": runtime.status.data,
             "meters": runtime.meters.data,

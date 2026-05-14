@@ -16,12 +16,20 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import CONF_GATEWAY_HOST, CONF_GATEWAY_PASSWORD, KEY_FILENAME
+from .const import (
+    CONF_GATEWAY_HOST,
+    CONF_GATEWAY_PASSWORD,
+    KEY_FILENAME,
+    LOGGER,
+    MASTER_BATTERY_DIN_SUFFIX,
+)
 from .coordinator import (
     BackupEventsCoordinator,
     BatterySoeCoordinator,
+    ComponentsCoordinator,
     ConfigCoordinator,
     GridStatusCoordinator,
+    MasterBlock,
     MetersCoordinator,
     PowerwallRuntimeData,
     PowerwallV1RConfigEntry,
@@ -70,6 +78,7 @@ async def async_setup_entry(
     grid_status = GridStatusCoordinator(hass, entry, client)
     config = ConfigCoordinator(hass, entry, client)
     backup_events = BackupEventsCoordinator(hass, entry, client)
+    components = ComponentsCoordinator(hass, entry, client)
 
     await asyncio.gather(
         status.async_config_entry_first_refresh(),
@@ -78,7 +87,19 @@ async def async_setup_entry(
         grid_status.async_config_entry_first_refresh(),
         config.async_config_entry_first_refresh(),
         backup_events.async_config_entry_first_refresh(),
+        components.async_config_entry_first_refresh(),
     )
+
+    master_blocks = _master_blocks(config.data, din)
+    if len(master_blocks) > 1:
+        LOGGER.warning(
+            "Site has %d Powerwall masters but only the first will be exposed "
+            "as per-battery devices — components-array indexing for multi-master "
+            "sites isn't confirmed from real captures yet. Please share a "
+            "get_components capture if you see this.",
+            len(master_blocks),
+        )
+        master_blocks = master_blocks[:1]
 
     entry.runtime_data = PowerwallRuntimeData(
         client=client,
@@ -90,9 +111,44 @@ async def async_setup_entry(
         grid_status=grid_status,
         config=config,
         backup_events=backup_events,
+        components=components,
+        master_blocks=master_blocks,
     )
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
+
+
+def _master_blocks(config_payload: dict, gateway_din: str) -> tuple[MasterBlock, ...]:
+    """Build per-master block metadata from get_config.battery_blocks.
+
+    Each entry in ``battery_blocks`` is one Powerwall master with its own
+    optional ``battery_expansions[]``. Block 0's HA device identifier is
+    derived from the gateway DIN for backwards compatibility with existing
+    deployments; later blocks use a numeric suffix.
+    """
+    blocks = config_payload.get("battery_blocks") or []
+    out: list[MasterBlock] = []
+    for i, block in enumerate(blocks):
+        expansion_dins = tuple(
+            expansion["din"]
+            for expansion in block.get("battery_expansions") or []
+            if isinstance(expansion, dict)
+            and isinstance(expansion.get("din"), str)
+            and expansion["din"]
+        )
+        device_din = (
+            f"{gateway_din}{MASTER_BATTERY_DIN_SUFFIX}"
+            if i == 0
+            else f"{gateway_din}_battery_{i}"
+        )
+        out.append(
+            MasterBlock(
+                block_index=i,
+                device_din=device_din,
+                expansion_dins=expansion_dins,
+            )
+        )
+    return tuple(out)
 
 
 async def async_unload_entry(

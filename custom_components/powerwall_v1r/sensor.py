@@ -39,8 +39,18 @@ from homeassistant.helpers.update_coordinator import (
 )
 from homeassistant.util import dt as dt_util
 
-from .const import DOMAIN, MANUFACTURER, MODEL
-from .coordinator import PowerwallRuntimeData, PowerwallV1RConfigEntry
+from .const import (
+    DOMAIN,
+    MANUFACTURER,
+    MODEL,
+    MODEL_EXPANSION,
+    MODEL_MASTER,
+)
+from .coordinator import (
+    MasterBlock,
+    PowerwallRuntimeData,
+    PowerwallV1RConfigEntry,
+)
 
 
 def _path(data: Any, *keys: Any) -> Any:
@@ -63,6 +73,18 @@ class PowerwallV1RSensorDescription(SensorEntityDescription):
 
     coordinator_attr: str
     value_fn: Callable[[Any], StateType]
+
+
+@dataclass(frozen=True, kw_only=True)
+class ExpansionSensorDescription(SensorEntityDescription):
+    """Sensor that belongs to a battery expansion device (not the master).
+
+    ``slot_index`` is the components-payload slot for the expansion (within
+    its master's block; 1-based, since slot 0 is the master itself).
+    """
+
+    slot_index: int
+    value_fn: Callable[[dict[str, Any]], StateType]
 
 
 POWER = SensorDeviceClass.POWER
@@ -169,6 +191,76 @@ def _meters_field(location: str, field: str) -> Callable[[dict[str, Any]], State
 def _config_field(*path: str) -> Callable[[dict[str, Any]], StateType]:
     def _fn(cfg: dict[str, Any]) -> StateType:
         return _path(cfg, *path)
+
+    return _fn
+
+
+def _signal(component: Any, name: str) -> Any:
+    """Return the numeric or text value of a named signal from a component entry.
+
+    Components payload shape: ``{components: {<kind>: [{signals: [{name, value,
+    textValue, boolValue}, ...]}, ...]}}``. Prefers ``value`` (number), then
+    ``textValue``, then ``boolValue``.
+    """
+    if not isinstance(component, Mapping):
+        return None
+    for sig in component.get("signals") or ():
+        if not isinstance(sig, Mapping) or sig.get("name") != name:
+            continue
+        if sig.get("value") is not None:
+            return sig["value"]
+        if sig.get("textValue") is not None:
+            return sig["textValue"]
+        return sig.get("boolValue")
+    return None
+
+
+def _component_at(kind: str, index: int) -> Callable[[dict[str, Any]], Any]:
+    def _fn(data: dict[str, Any]) -> Any:
+        items = _path(data, "components", kind)
+        if not isinstance(items, list) or index >= len(items):
+            return None
+        return items[index]
+
+    return _fn
+
+
+def _component_signal(
+    kind: str, index: int, name: str
+) -> Callable[[dict[str, Any]], StateType]:
+    getter = _component_at(kind, index)
+
+    def _fn(data: dict[str, Any]) -> StateType:
+        return _signal(getter(data), name)
+
+    return _fn
+
+
+def _component_field(
+    kind: str, index: int, field: str
+) -> Callable[[dict[str, Any]], StateType]:
+    """Pull a top-level field (e.g. ``partNumber``) from a component entry."""
+    getter = _component_at(kind, index)
+
+    def _fn(data: dict[str, Any]) -> StateType:
+        comp = getter(data)
+        if not isinstance(comp, Mapping):
+            return None
+        value = comp.get(field)
+        return value if value else None
+
+    return _fn
+
+
+def _pch_current(name: str) -> Callable[[dict[str, Any]], StateType]:
+    """PCH PV currents come back as ~1e-16 noise when zero — round at the edge."""
+    inner = _component_signal("pch", 0, name)
+
+    def _fn(data: dict[str, Any]) -> StateType:
+        value = inner(data)
+        if isinstance(value, (int, float)) and abs(value) < 1e-3:
+            return 0.0
+        return value
 
     return _fn
 
@@ -571,13 +663,331 @@ _CONFIG_SENSORS: tuple[PowerwallV1RSensorDescription, ...] = (
 )
 
 
-_ALL_SENSORS: tuple[PowerwallV1RSensorDescription, ...] = (
+_PCH_STRINGS = ("a", "b", "c", "d", "e", "f")
+
+
+# NOTE: every component-payload slot index in `_MASTER_COMPONENT_SENSORS`
+# below is hardcoded to 0, which is correct only for the first (and on
+# every site captured to date, the only) master Powerwall. Multi-master
+# sites are guarded out at setup; lifting the guard will require turning
+# this tuple into a per-block builder once the stride between blocks in
+# the components arrays is confirmed from a real capture.
+_MASTER_COMPONENT_SENSORS: tuple[PowerwallV1RSensorDescription, ...] = (
+    # Master battery — BMS energy
+    PowerwallV1RSensorDescription(
+        key="bms_0_energy_remaining",
+        translation_key="bms_energy_remaining",
+        device_class=ENERGY_STORE,
+        state_class=MEAS,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        suggested_display_precision=2,
+        coordinator_attr="components",
+        value_fn=_component_signal("bms", 0, "BMS_nominalEnergyRemaining"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="bms_0_full_pack_energy",
+        translation_key="bms_full_pack_energy",
+        device_class=ENERGY_STORE,
+        state_class=MEAS,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        suggested_display_precision=2,
+        entity_category=DIAG,
+        coordinator_attr="components",
+        value_fn=_component_signal("bms", 0, "BMS_nominalFullPackEnergy"),
+    ),
+    # PCH AC measurements (master only — master arbitrates AC for the whole stack)
+    PowerwallV1RSensorDescription(
+        key="pch_ac_frequency",
+        translation_key="pch_ac_frequency",
+        device_class=SensorDeviceClass.FREQUENCY,
+        state_class=MEAS,
+        native_unit_of_measurement=UnitOfFrequency.HERTZ,
+        suggested_display_precision=3,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_AcFrequency"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="pch_ac_voltage_ab",
+        translation_key="pch_ac_voltage_ab",
+        device_class=SensorDeviceClass.VOLTAGE,
+        state_class=MEAS,
+        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        suggested_display_precision=1,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_AcVoltageAB"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="pch_ac_voltage_an",
+        translation_key="pch_ac_voltage_an",
+        device_class=SensorDeviceClass.VOLTAGE,
+        state_class=MEAS,
+        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        suggested_display_precision=1,
+        entity_registry_enabled_default=False,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_AcVoltageAN"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="pch_ac_voltage_bn",
+        translation_key="pch_ac_voltage_bn",
+        device_class=SensorDeviceClass.VOLTAGE,
+        state_class=MEAS,
+        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        suggested_display_precision=1,
+        entity_registry_enabled_default=False,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_AcVoltageBN"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="pch_ac_real_power",
+        translation_key="pch_ac_real_power",
+        device_class=POWER,
+        state_class=MEAS,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_AcRealPowerAB"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="pch_battery_power",
+        translation_key="pch_battery_power",
+        device_class=POWER,
+        state_class=MEAS,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_BatteryPower"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="pch_pv_power_sum",
+        translation_key="pch_pv_power_sum",
+        device_class=POWER,
+        state_class=MEAS,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_SlowPvPowerSum"),
+    ),
+    # BAGGR diagnostics (master only — battery aggregator across all units)
+    PowerwallV1RSensorDescription(
+        key="baggr_batteries_connected",
+        translation_key="baggr_batteries_connected",
+        state_class=MEAS,
+        entity_category=DIAG,
+        coordinator_attr="components",
+        value_fn=_component_signal("baggr", 0, "BAGGR_NumBatteriesConnected"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="baggr_batteries_expected",
+        translation_key="baggr_batteries_expected",
+        state_class=MEAS,
+        entity_category=DIAG,
+        entity_registry_enabled_default=False,
+        coordinator_attr="components",
+        value_fn=_component_signal("baggr", 0, "BAGGR_NumBatteriesExpected"),
+    ),
+    *(
+        PowerwallV1RSensorDescription(
+            key=f"pch_pv_voltage_{s}",
+            translation_key=f"pch_pv_voltage_{s}",
+            device_class=SensorDeviceClass.VOLTAGE,
+            state_class=MEAS,
+            native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+            suggested_display_precision=1,
+            coordinator_attr="components",
+            value_fn=_component_signal("pch", 0, f"PCH_PvVoltage{s.upper()}"),
+        )
+        for s in _PCH_STRINGS
+    ),
+    *(
+        PowerwallV1RSensorDescription(
+            key=f"pch_pv_current_{s}",
+            translation_key=f"pch_pv_current_{s}",
+            device_class=SensorDeviceClass.CURRENT,
+            state_class=MEAS,
+            native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
+            suggested_display_precision=2,
+            coordinator_attr="components",
+            value_fn=_pch_current(f"PCH_PvCurrent{s.upper()}"),
+        )
+        for s in _PCH_STRINGS
+    ),
+    # PCH state strings (master only)
+    PowerwallV1RSensorDescription(
+        key="pch_state",
+        translation_key="pch_state",
+        entity_category=DIAG,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_State"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="pch_ac_mode",
+        translation_key="pch_ac_mode",
+        entity_category=DIAG,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_AcMode"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="pch_dcdc_state_a",
+        translation_key="pch_dcdc_state_a",
+        entity_category=DIAG,
+        entity_registry_enabled_default=False,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_DcdcState_A"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="pch_dcdc_state_b",
+        translation_key="pch_dcdc_state_b",
+        entity_category=DIAG,
+        entity_registry_enabled_default=False,
+        coordinator_attr="components",
+        value_fn=_component_signal("pch", 0, "PCH_DcdcState_B"),
+    ),
+    *(
+        PowerwallV1RSensorDescription(
+            key=f"pch_pv_state_{s}",
+            translation_key=f"pch_pv_state_{s}",
+            entity_category=DIAG,
+            entity_registry_enabled_default=False,
+            coordinator_attr="components",
+            value_fn=_component_signal("pch", 0, f"PCH_PvState_{s.upper()}"),
+        )
+        for s in _PCH_STRINGS
+    ),
+    # BAGGR state + per-slot battery connection status (master only)
+    PowerwallV1RSensorDescription(
+        key="baggr_state",
+        translation_key="baggr_state",
+        entity_category=DIAG,
+        coordinator_attr="components",
+        value_fn=_component_signal("baggr", 0, "BAGGR_State"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="baggr_operation_request",
+        translation_key="baggr_operation_request",
+        entity_category=DIAG,
+        coordinator_attr="components",
+        value_fn=_component_signal("baggr", 0, "BAGGR_OperationRequest"),
+    ),
+    *(
+        PowerwallV1RSensorDescription(
+            key=f"baggr_batt_connection_status_{n}",
+            translation_key=f"baggr_batt_connection_status_{n}",
+            entity_category=DIAG,
+            coordinator_attr="components",
+            value_fn=_component_signal(
+                "baggr", 0, f"BAGGR_LOG_BattConnectionStatus{n}"
+            ),
+        )
+        for n in range(4)
+    ),
+    # HVP for the master battery (slot 0)
+    PowerwallV1RSensorDescription(
+        key="hvp_0_state",
+        translation_key="hvp_state",
+        entity_category=DIAG,
+        coordinator_attr="components",
+        value_fn=_component_signal("hvp", 0, "HVP_State"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="hvp_0_part_number",
+        translation_key="hvp_part_number",
+        entity_category=DIAG,
+        entity_registry_enabled_default=False,
+        coordinator_attr="components",
+        value_fn=_component_field("hvp", 0, "partNumber"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="hvp_0_serial_number",
+        translation_key="hvp_serial_number",
+        entity_category=DIAG,
+        entity_registry_enabled_default=False,
+        coordinator_attr="components",
+        value_fn=_component_field("hvp", 0, "serialNumber"),
+    ),
+)
+
+
+_SITE_SENSORS: tuple[PowerwallV1RSensorDescription, ...] = (
     *_STATUS_SENSORS,
     *_METERS_AGGREGATE_SENSORS,
     *_BATTERY_SOE_SENSORS,
     *_GRID_STATUS_SENSORS,
     *_CONFIG_SENSORS,
 )
+
+
+def _block_expansion_descriptions(
+    block: MasterBlock,
+) -> tuple[tuple[str, ExpansionSensorDescription], ...]:
+    """Per-expansion sensor descriptions for one master block.
+
+    Returns ``(expansion_din, description)`` pairs. The components-payload
+    slot for an expansion within its block is ``offset + 1`` (slot 0 is
+    the master itself); global-array slot translation lives upstream.
+    """
+    # See note on `_MASTER_COMPONENT_SENSORS`: block-0 expansions live at
+    # global slots 1..N today. When multi-master support lands, replace
+    # `slot = offset + 1` with the cross-block stride calculation.
+    if block.block_index != 0:
+        raise NotImplementedError(
+            "multi-master expansion indexing is not yet confirmed"
+        )
+
+    out: list[tuple[str, ExpansionSensorDescription]] = []
+    for offset, din in enumerate(block.expansion_dins):
+        slot = offset + 1
+        out.extend(
+            (din, desc)
+            for desc in (
+                ExpansionSensorDescription(
+                    key=f"bms_{slot}_energy_remaining",
+                    translation_key="bms_energy_remaining",
+                    device_class=ENERGY_STORE,
+                    state_class=MEAS,
+                    native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+                    suggested_display_precision=2,
+                    slot_index=slot,
+                    value_fn=_component_signal(
+                        "bms", slot, "BMS_nominalEnergyRemaining"
+                    ),
+                ),
+                ExpansionSensorDescription(
+                    key=f"bms_{slot}_full_pack_energy",
+                    translation_key="bms_full_pack_energy",
+                    device_class=ENERGY_STORE,
+                    state_class=MEAS,
+                    native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+                    suggested_display_precision=2,
+                    entity_category=DIAG,
+                    slot_index=slot,
+                    value_fn=_component_signal(
+                        "bms", slot, "BMS_nominalFullPackEnergy"
+                    ),
+                ),
+                ExpansionSensorDescription(
+                    key=f"hvp_{slot}_state",
+                    translation_key="hvp_state",
+                    entity_category=DIAG,
+                    slot_index=slot,
+                    value_fn=_component_signal("hvp", slot, "HVP_State"),
+                ),
+                ExpansionSensorDescription(
+                    key=f"hvp_{slot}_part_number",
+                    translation_key="hvp_part_number",
+                    entity_category=DIAG,
+                    entity_registry_enabled_default=False,
+                    slot_index=slot,
+                    value_fn=_component_field("hvp", slot, "partNumber"),
+                ),
+                ExpansionSensorDescription(
+                    key=f"hvp_{slot}_serial_number",
+                    translation_key="hvp_serial_number",
+                    entity_category=DIAG,
+                    entity_registry_enabled_default=False,
+                    slot_index=slot,
+                    value_fn=_component_field("hvp", slot, "serialNumber"),
+                ),
+            )
+        )
+    return tuple(out)
 
 
 async def async_setup_entry(
@@ -587,9 +997,19 @@ async def async_setup_entry(
 ) -> None:
     """Set up Powerwall V1R sensors."""
     runtime = entry.runtime_data
-    async_add_entities(
-        PowerwallV1RSensor(runtime, description) for description in _ALL_SENSORS
-    )
+    entities: list[CoordinatorEntity[DataUpdateCoordinator[Any]]] = [
+        PowerwallV1RSensor(runtime, description) for description in _SITE_SENSORS
+    ]
+    for block in runtime.master_blocks:
+        entities.extend(
+            MasterBatterySensor(runtime, block, description)
+            for description in _MASTER_COMPONENT_SENSORS
+        )
+        entities.extend(
+            ExpansionSensor(runtime, block, expansion_din, description)
+            for expansion_din, description in _block_expansion_descriptions(block)
+        )
+    async_add_entities(entities)
 
 
 class PowerwallV1RSensor(CoordinatorEntity[DataUpdateCoordinator[Any]], SensorEntity):
@@ -616,6 +1036,91 @@ class PowerwallV1RSensor(CoordinatorEntity[DataUpdateCoordinator[Any]], SensorEn
             model=MODEL,
             serial_number=runtime.din,
             sw_version=runtime.firmware_version,
+        )
+
+    @property
+    def native_value(self) -> StateType:
+        return self.entity_description.value_fn(self.coordinator.data)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        self.async_write_ha_state()
+
+
+class MasterBatterySensor(
+    CoordinatorEntity[DataUpdateCoordinator[Any]], SensorEntity
+):
+    """A sensor for a master Powerwall battery (one per ``MasterBlock``).
+
+    Master batteries are modelled as children of the site/gateway device so
+    per-battery readings are scoped to the battery, not bundled onto the site.
+    """
+
+    _attr_has_entity_name = True
+    entity_description: PowerwallV1RSensorDescription
+
+    def __init__(
+        self,
+        runtime: PowerwallRuntimeData,
+        block: MasterBlock,
+        description: PowerwallV1RSensorDescription,
+    ) -> None:
+        super().__init__(runtime.components)
+        self.entity_description = description
+        # For block 0 we keep the gateway-DIN-scoped unique-id pattern so
+        # entities created before the per-battery refactor migrate cleanly
+        # (HA's entity registry follows them to whatever device_info now
+        # points at). Multi-master sites are guarded out today; when that
+        # changes, block 1+ should adopt a block-disambiguated key.
+        self._attr_unique_id = f"{runtime.din}_{description.key}"
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, block.device_din)},
+            name="Powerwall",
+            manufacturer=MANUFACTURER,
+            model=MODEL_MASTER,
+            via_device=(DOMAIN, runtime.din),
+        )
+
+    @property
+    def native_value(self) -> StateType:
+        return self.entity_description.value_fn(self.coordinator.data)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        self.async_write_ha_state()
+
+
+class ExpansionSensor(CoordinatorEntity[DataUpdateCoordinator[Any]], SensorEntity):
+    """A sensor that belongs to a battery-expansion device on a PW3 stack.
+
+    Expansion devices are linked back to their owning master via
+    ``via_device`` so they show up as children of that specific Powerwall
+    in the device registry.
+    """
+
+    _attr_has_entity_name = True
+    entity_description: ExpansionSensorDescription
+
+    def __init__(
+        self,
+        runtime: PowerwallRuntimeData,
+        block: MasterBlock,
+        expansion_din: str,
+        description: ExpansionSensorDescription,
+    ) -> None:
+        super().__init__(runtime.components)
+        self.entity_description = description
+        # DINs look like "<partNumber>--<serialNumber>"; the serial is what
+        # users see on the unit sticker.
+        serial = expansion_din.rsplit("--", 1)[-1]
+        self._attr_unique_id = f"{expansion_din}_{description.key}"
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, expansion_din)},
+            name=f"Powerwall expansion {description.slot_index}",
+            manufacturer=MANUFACTURER,
+            model=MODEL_EXPANSION,
+            serial_number=serial,
+            via_device=(DOMAIN, block.device_din),
         )
 
     @property
