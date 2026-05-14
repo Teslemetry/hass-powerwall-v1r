@@ -1,7 +1,6 @@
 {
   "domain": "powerwall_v1r",
-  "brand": "tesla",
-  "name": "Powerwall V1R",
+  "name": "Teslemetry Local Powerwall",
   "version": "0.1.0",
   "documentation": "https://github.com/Teslemetry/powerwall-v1r",
   "issue_tracker": "https://github.com/Teslemetry/powerwall-v1r/issues",
