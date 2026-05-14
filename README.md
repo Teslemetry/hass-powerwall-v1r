@@ -1,4 +1,4 @@
-# Powerwall V1R
+# Teslemetry Local Powerwall
 
 Custom Home Assistant integration for the original Powerwall V1 hardware that Tesla no longer exposes through the standard Powerwall integration.
 
@@ -8,8 +8,8 @@ Setup is bootstrapped through your existing [Teslemetry](https://teslemetry.com)
 
 1. In HACS, open **Integrations** → menu → **Custom repositories**.
 2. Add this repository's URL with category **Integration**.
-3. Install **Powerwall V1R** and restart Home Assistant.
-4. **Settings → Devices & Services → Add Integration → Powerwall V1R**, select the Teslemetry entry and energy site, then complete local gateway pairing.
+3. Install **Teslemetry Local Powerwall** and restart Home Assistant.
+4. **Settings → Devices & Services → Add Integration → Teslemetry Local Powerwall**, select the Teslemetry entry and energy site, then complete local gateway pairing.
 
 ## Manual installation
 

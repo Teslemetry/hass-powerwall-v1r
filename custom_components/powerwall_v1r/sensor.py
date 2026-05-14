@@ -252,6 +252,23 @@ def _component_field(
     return _fn
 
 
+def _bms_percentage_charged(slot: int) -> Callable[[dict[str, Any]], StateType]:
+    """Compute SoC% from BMS_nominalEnergyRemaining / BMS_nominalFullPackEnergy."""
+    remaining_fn = _component_signal("bms", slot, "BMS_nominalEnergyRemaining")
+    full_fn = _component_signal("bms", slot, "BMS_nominalFullPackEnergy")
+
+    def _fn(data: dict[str, Any]) -> StateType:
+        remaining = remaining_fn(data)
+        full = full_fn(data)
+        if not isinstance(remaining, (int, float)) or not isinstance(full, (int, float)):
+            return None
+        if not full:
+            return None
+        return round(float(remaining) / float(full) * 100, 2)
+
+    return _fn
+
+
 def _pch_current(name: str) -> Callable[[dict[str, Any]], StateType]:
     """PCH PV currents come back as ~1e-16 noise when zero — round at the edge."""
     inner = _component_signal("pch", 0, name)
@@ -692,8 +709,19 @@ _MASTER_COMPONENT_SENSORS: tuple[PowerwallV1RSensorDescription, ...] = (
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         suggested_display_precision=2,
         entity_category=DIAG,
+        entity_registry_enabled_default=False,
         coordinator_attr="components",
         value_fn=_component_signal("bms", 0, "BMS_nominalFullPackEnergy"),
+    ),
+    PowerwallV1RSensorDescription(
+        key="bms_0_percentage_charged",
+        translation_key="bms_percentage_charged",
+        device_class=SensorDeviceClass.BATTERY,
+        state_class=MEAS,
+        native_unit_of_measurement=PERCENTAGE,
+        suggested_display_precision=1,
+        coordinator_attr="components",
+        value_fn=_bms_percentage_charged(0),
     ),
     # PCH AC measurements (master only — master arbitrates AC for the whole stack)
     PowerwallV1RSensorDescription(
@@ -957,10 +985,21 @@ def _block_expansion_descriptions(
                     native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
                     suggested_display_precision=2,
                     entity_category=DIAG,
+                    entity_registry_enabled_default=False,
                     slot_index=slot,
                     value_fn=_component_signal(
                         "bms", slot, "BMS_nominalFullPackEnergy"
                     ),
+                ),
+                ExpansionSensorDescription(
+                    key=f"bms_{slot}_percentage_charged",
+                    translation_key="bms_percentage_charged",
+                    device_class=SensorDeviceClass.BATTERY,
+                    state_class=MEAS,
+                    native_unit_of_measurement=PERCENTAGE,
+                    suggested_display_precision=1,
+                    slot_index=slot,
+                    value_fn=_bms_percentage_charged(slot),
                 ),
                 ExpansionSensorDescription(
                     key=f"hvp_{slot}_state",

@@ -1,5 +1,5 @@
 {
-  "name": "Powerwall V1R",
+  "name": "Teslemetry Local Powerwall",
   "render_readme": true,
   "homeassistant": "2026.4.0",
   "zip_release": true,

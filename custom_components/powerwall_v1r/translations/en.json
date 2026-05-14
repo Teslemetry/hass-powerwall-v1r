@@ -145,6 +145,7 @@
       "meter_y_vl3n": { "name": "Meter Y voltage L3-N" },
       "bms_energy_remaining": { "name": "Energy remaining" },
       "bms_full_pack_energy": { "name": "Full pack energy" },
+      "bms_percentage_charged": { "name": "Charge" },
       "pch_ac_frequency": { "name": "AC frequency" },
       "pch_ac_voltage_ab": { "name": "AC voltage A-B" },
       "pch_ac_voltage_an": { "name": "AC voltage A-N" },
