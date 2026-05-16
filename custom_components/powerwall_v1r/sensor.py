@@ -79,11 +79,11 @@ class PowerwallV1RSensorDescription(SensorEntityDescription):
 class ExpansionSensorDescription(SensorEntityDescription):
     """Sensor that belongs to a battery expansion device (not the master).
 
-    ``slot_index`` is the components-payload slot for the expansion (within
-    its master's block; 1-based, since slot 0 is the master itself).
+    ``slot_index`` is the global components-payload slot for the expansion.
     """
 
     slot_index: int
+    display_index: int
     value_fn: Callable[[dict[str, Any]], StateType]
 
 
@@ -223,6 +223,24 @@ def _component_at(kind: str, index: int) -> Callable[[dict[str, Any]], Any]:
         return items[index]
 
     return _fn
+
+
+def _component_slot_view(data: dict[str, Any], slot: int) -> dict[str, Any]:
+    """Return a components payload where ``slot`` is visible as index 0."""
+    if slot == 0:
+        return data
+    components = data.get("components")
+    if not isinstance(components, Mapping):
+        return data
+
+    remapped: dict[str, Any] = {}
+    for kind, items in components.items():
+        if isinstance(items, list) and 0 <= slot < len(items):
+            remapped[kind] = [items[slot]]
+        else:
+            remapped[kind] = []
+
+    return {**data, "components": remapped}
 
 
 def _component_signal(
@@ -684,11 +702,10 @@ _PCH_STRINGS = ("a", "b", "c", "d", "e", "f")
 
 
 # NOTE: every component-payload slot index in `_MASTER_COMPONENT_SENSORS`
-# below is hardcoded to 0, which is correct only for the first (and on
-# every site captured to date, the only) master Powerwall. Multi-master
-# sites are guarded out at setup; lifting the guard will require turning
-# this tuple into a per-block builder once the stride between blocks in
-# the components arrays is confirmed from a real capture.
+# below is intentionally scoped to 0. `MasterBatterySensor` remaps each
+# block's global component slot into position 0 before evaluating these
+# descriptions. This preserves the existing block-0 entity keys while letting
+# follower PW3 blocks use their own component slots.
 _MASTER_COMPONENT_SENSORS: tuple[PowerwallV1RSensorDescription, ...] = (
     # Master battery — BMS energy
     PowerwallV1RSensorDescription(
@@ -948,20 +965,12 @@ def _block_expansion_descriptions(
     """Per-expansion sensor descriptions for one master block.
 
     Returns ``(expansion_din, description)`` pairs. The components-payload
-    slot for an expansion within its block is ``offset + 1`` (slot 0 is
-    the master itself); global-array slot translation lives upstream.
+    slot is global across Powerwalls first, then expansions.
     """
-    # See note on `_MASTER_COMPONENT_SENSORS`: block-0 expansions live at
-    # global slots 1..N today. When multi-master support lands, replace
-    # `slot = offset + 1` with the cross-block stride calculation.
-    if block.block_index != 0:
-        raise NotImplementedError(
-            "multi-master expansion indexing is not yet confirmed"
-        )
-
     out: list[tuple[str, ExpansionSensorDescription]] = []
     for offset, din in enumerate(block.expansion_dins):
-        slot = offset + 1
+        slot = block.first_expansion_slot + offset
+        display_index = block.first_expansion_display_index + offset
         out.extend(
             (din, desc)
             for desc in (
@@ -973,6 +982,7 @@ def _block_expansion_descriptions(
                     native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
                     suggested_display_precision=2,
                     slot_index=slot,
+                    display_index=display_index,
                     value_fn=_component_signal(
                         "bms", slot, "BMS_nominalEnergyRemaining"
                     ),
@@ -987,6 +997,7 @@ def _block_expansion_descriptions(
                     entity_category=DIAG,
                     entity_registry_enabled_default=False,
                     slot_index=slot,
+                    display_index=display_index,
                     value_fn=_component_signal(
                         "bms", slot, "BMS_nominalFullPackEnergy"
                     ),
@@ -999,6 +1010,7 @@ def _block_expansion_descriptions(
                     native_unit_of_measurement=PERCENTAGE,
                     suggested_display_precision=1,
                     slot_index=slot,
+                    display_index=display_index,
                     value_fn=_bms_percentage_charged(slot),
                 ),
                 ExpansionSensorDescription(
@@ -1006,6 +1018,7 @@ def _block_expansion_descriptions(
                     translation_key="hvp_state",
                     entity_category=DIAG,
                     slot_index=slot,
+                    display_index=display_index,
                     value_fn=_component_signal("hvp", slot, "HVP_State"),
                 ),
                 ExpansionSensorDescription(
@@ -1014,6 +1027,7 @@ def _block_expansion_descriptions(
                     entity_category=DIAG,
                     entity_registry_enabled_default=False,
                     slot_index=slot,
+                    display_index=display_index,
                     value_fn=_component_field("hvp", slot, "partNumber"),
                 ),
                 ExpansionSensorDescription(
@@ -1022,6 +1036,7 @@ def _block_expansion_descriptions(
                     entity_category=DIAG,
                     entity_registry_enabled_default=False,
                     slot_index=slot,
+                    display_index=display_index,
                     value_fn=_component_field("hvp", slot, "serialNumber"),
                 ),
             )
@@ -1105,24 +1120,33 @@ class MasterBatterySensor(
         description: PowerwallV1RSensorDescription,
     ) -> None:
         super().__init__(runtime.components)
+        self._block = block
         self.entity_description = description
         # For block 0 we keep the gateway-DIN-scoped unique-id pattern so
-        # entities created before the per-battery refactor migrate cleanly
-        # (HA's entity registry follows them to whatever device_info now
-        # points at). Multi-master sites are guarded out today; when that
-        # changes, block 1+ should adopt a block-disambiguated key.
-        self._attr_unique_id = f"{runtime.din}_{description.key}"
+        # entities created before the per-battery refactor migrate cleanly.
+        self._attr_unique_id = (
+            f"{runtime.din}_{description.key}"
+            if block.block_index == 0
+            else f"{block.device_din}_{description.key}"
+        )
+        serial = (
+            block.physical_din.rsplit("--", 1)[-1]
+            if block.physical_din
+            else None
+        )
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, block.device_din)},
-            name="Powerwall",
+            name="Powerwall" if block.role == "leader" else "Powerwall follower",
             manufacturer=MANUFACTURER,
             model=MODEL_MASTER,
+            serial_number=serial,
             via_device=(DOMAIN, runtime.din),
         )
 
     @property
     def native_value(self) -> StateType:
-        return self.entity_description.value_fn(self.coordinator.data)
+        data = _component_slot_view(self.coordinator.data, self._block.component_slot)
+        return self.entity_description.value_fn(data)
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -1155,7 +1179,7 @@ class ExpansionSensor(CoordinatorEntity[DataUpdateCoordinator[Any]], SensorEntit
         self._attr_unique_id = f"{expansion_din}_{description.key}"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, expansion_din)},
-            name=f"Powerwall expansion {description.slot_index}",
+            name=f"Powerwall expansion {description.display_index}",
             manufacturer=MANUFACTURER,
             model=MODEL_EXPANSION,
             serial_number=serial,

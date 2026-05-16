@@ -44,22 +44,27 @@ type PowerwallV1RConfigEntry = ConfigEntry["PowerwallRuntimeData"]
 
 @dataclass(frozen=True)
 class MasterBlock:
-    """One Powerwall master and its expansions.
+    """One Powerwall block and its expansions.
 
     Mirrors a single entry in ``get_config['battery_blocks']``: the master
     is the Powerwall that owns ``expansion_dins[]`` (which may be empty for
     masters with no expansions installed). ``block_index`` is the position
-    in ``battery_blocks`` and is reused as the master's slot in the
-    components payload arrays (``bms[]``/``hvp[]``/``pch[]``/``baggr[]``).
+    in ``battery_blocks``. ``component_slot`` is the slot in the components
+    payload arrays (``bms[]``/``hvp[]``/``pch[]``/``baggr[]``).
 
-    For multi-master sites the stride between blocks in the components
-    arrays isn't yet confirmed from real captures, so callers should guard
-    on ``len(master_blocks) > 1`` and only act on index 0 for now.
+    PW3 follower units appear as additional Powerwall blocks. Their component
+    slots come before expansion slots, so a 2x PW3 + 2 expansion site maps as
+    slots 0,1 = Powerwalls and slots 2,3 = expansions.
     """
 
     block_index: int
+    component_slot: int
     device_din: str
+    physical_din: str | None
+    role: str
     expansion_dins: tuple[str, ...]
+    first_expansion_slot: int
+    first_expansion_display_index: int
 
 
 @dataclass
