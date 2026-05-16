@@ -965,11 +965,13 @@ def _block_expansion_descriptions(
     """Per-expansion sensor descriptions for one master block.
 
     Returns ``(expansion_din, description)`` pairs. The components-payload
-    slot is global across Powerwalls first, then expansions.
+    slot is global across the components payload and may be interleaved with
+    follower Powerwall slots.
     """
     out: list[tuple[str, ExpansionSensorDescription]] = []
-    for offset, din in enumerate(block.expansion_dins):
-        slot = block.first_expansion_slot + offset
+    for offset, (din, slot) in enumerate(
+        zip(block.expansion_dins, block.expansion_slots, strict=False)
+    ):
         display_index = block.first_expansion_display_index + offset
         out.extend(
             (din, desc)

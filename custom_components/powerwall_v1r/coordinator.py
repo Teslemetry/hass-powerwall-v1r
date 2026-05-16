@@ -52,9 +52,9 @@ class MasterBlock:
     in ``battery_blocks``. ``component_slot`` is the slot in the components
     payload arrays (``bms[]``/``hvp[]``/``pch[]``/``baggr[]``).
 
-    PW3 follower units appear as additional Powerwall blocks. Their component
-    slots come before expansion slots, so a 2x PW3 + 2 expansion site maps as
-    slots 0,1 = Powerwalls and slots 2,3 = expansions.
+    PW3 follower units appear as additional Powerwall blocks. Tesla's component
+    slot order is not guaranteed to put all Powerwalls before all expansions, so
+    each master/expansion stores the exact component slot it should read.
     """
 
     block_index: int
@@ -63,6 +63,7 @@ class MasterBlock:
     physical_din: str | None
     role: str
     expansion_dins: tuple[str, ...]
+    expansion_slots: tuple[int, ...]
     first_expansion_slot: int
     first_expansion_display_index: int
 

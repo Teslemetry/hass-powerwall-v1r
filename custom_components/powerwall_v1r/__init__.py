@@ -117,6 +117,22 @@ def _block_din(block: dict) -> str | None:
     return None
 
 
+def _serial_from_din(din: str | None) -> str | None:
+    """Return the serial suffix from a DIN/VIN-like identifier."""
+    if not din:
+        return None
+    return din.rsplit("--", 1)[-1]
+
+
+def _expansion_din(expansion: dict) -> str | None:
+    """Return the physical DIN/VIN carried by a battery expansion."""
+    for key in ("din", "vin"):
+        value = expansion.get(key)
+        if isinstance(value, str) and value:
+            return value
+    return None
+
+
 def _status_battery_dins(status_payload: dict) -> tuple[str, ...]:
     """Return Powerwall DINs reported by the live status payload."""
     blocks = (
@@ -171,31 +187,89 @@ def _component_serial(components_payload: dict, slot: int) -> str | None:
     return None
 
 
-def _inferred_expansion_dins(
-    components_payload: dict,
-    powerwall_count: int,
-    existing_expansion_count: int,
-    gateway_din: str,
-) -> tuple[str, ...]:
-    """Infer expansion slots from BMS components when config omits them."""
+def _bms_component_slots(components_payload: dict) -> tuple[int, ...]:
+    """Return component slots that look like real BMS modules."""
     bms_items = _path(components_payload, "components", "bms")
-    if not isinstance(bms_items, list) or len(bms_items) <= powerwall_count:
+    if not isinstance(bms_items, list):
         return ()
 
-    expansion_dins: list[str] = []
-    for slot in range(powerwall_count, len(bms_items)):
-        component = bms_items[slot]
+    slots: list[int] = []
+    for slot, component in enumerate(bms_items):
         full = _signal_value(component, "BMS_nominalFullPackEnergy")
         if not isinstance(full, (int, float)) or full <= 0:
             continue
-        serial = _component_serial(components_payload, slot)
-        expansion_dins.append(
-            f"inferred-expansion--{serial}"
-            if serial
-            else f"{gateway_din}_expansion_{slot}"
-        )
+        slots.append(slot)
+    return tuple(slots)
 
-    return tuple(expansion_dins[existing_expansion_count:])
+
+def _matched_expansion_slots(
+    components_payload: dict,
+    expansion_dins: tuple[str, ...],
+) -> dict[str, int]:
+    """Match configured expansion DINs to component slots by serial suffix."""
+    serial_to_din = {
+        serial: din
+        for din in expansion_dins
+        if (serial := _serial_from_din(din))
+    }
+    if not serial_to_din:
+        return {}
+
+    matched: dict[str, int] = {}
+    for slot in _bms_component_slots(components_payload):
+        serial = _component_serial(components_payload, slot)
+        if serial in serial_to_din and serial_to_din[serial] not in matched:
+            matched[serial_to_din[serial]] = slot
+    return matched
+
+
+def _choose_follower_component_slots(
+    components_payload: dict,
+    powerwall_count: int,
+    expansion_slots: set[int],
+) -> tuple[int, ...]:
+    """Choose component slots for follower PW3 blocks.
+
+    Known expansion slots are protected first. When follower BMS rows have no
+    serial number, prefer those rows; otherwise fall back to the last available
+    component slots to preserve the old positional behaviour.
+    """
+    follower_count = max(0, powerwall_count - 1)
+    if follower_count == 0:
+        return ()
+
+    slots = list(_bms_component_slots(components_payload))
+    if not slots:
+        return tuple(range(1, powerwall_count))
+
+    candidates = [
+        slot for slot in slots if slot != 0 and slot not in expansion_slots
+    ]
+    no_serial_candidates = [
+        slot for slot in candidates if not _component_serial(components_payload, slot)
+    ]
+    pool = (
+        no_serial_candidates
+        if len(no_serial_candidates) >= follower_count
+        else candidates
+    )
+    chosen = list(pool[-follower_count:])
+    fallback_slot = 1
+    while len(chosen) < follower_count:
+        if fallback_slot not in chosen and fallback_slot not in expansion_slots:
+            chosen.append(fallback_slot)
+        fallback_slot += 1
+    return tuple(sorted(chosen))
+
+
+def _inferred_expansion_din(
+    components_payload: dict,
+    gateway_din: str,
+    slot: int,
+) -> str:
+    """Build a stable synthetic DIN for an expansion omitted from config."""
+    serial = _component_serial(components_payload, slot)
+    return f"inferred-expansion--{serial}" if serial else f"{gateway_din}_expansion_{slot}"
 
 
 def _master_blocks(
@@ -222,57 +296,111 @@ def _master_blocks(
             blocks.append({"din": din})
             known_dins.add(din)
 
+    if not blocks:
+        blocks.append({"din": gateway_din})
     powerwall_count = len(blocks)
-    existing_expansion_count = sum(
-        len(block.get("battery_expansions") or []) for block in blocks
+
+    expansion_dins_by_block = [
+        tuple(
+            din
+            for expansion in block.get("battery_expansions") or []
+            if isinstance(expansion, dict)
+            and (din := _expansion_din(expansion))
+        )
+        for block in blocks
+    ]
+    configured_expansion_dins = tuple(
+        din for dins in expansion_dins_by_block for din in dins
     )
-    inferred_expansions = _inferred_expansion_dins(
+    matched_expansion_slots = _matched_expansion_slots(
+        components_payload,
+        configured_expansion_dins,
+    )
+    follower_slots = _choose_follower_component_slots(
         components_payload,
         powerwall_count,
-        existing_expansion_count,
-        gateway_din,
+        set(matched_expansion_slots.values()),
     )
-    if inferred_expansions:
-        if not blocks:
-            blocks.append({"din": gateway_din})
-            powerwall_count = 1
-        first_block = blocks[0]
-        existing = list(first_block.get("battery_expansions") or [])
-        first_block["battery_expansions"] = [
-            *existing,
-            *({"din": din} for din in inferred_expansions),
-        ]
 
-    next_expansion_slot = powerwall_count
+    assigned_slots = {0, *follower_slots, *matched_expansion_slots.values()}
+    bms_slots = list(_bms_component_slots(components_payload))
+    fallback_expansion_slots = [
+        slot for slot in bms_slots if slot not in assigned_slots
+    ]
+    next_unobserved_expansion_slot = max(powerwall_count, len(bms_slots))
+
+    def next_expansion_slot() -> int:
+        nonlocal next_unobserved_expansion_slot
+        if fallback_expansion_slots:
+            slot = fallback_expansion_slots.pop(0)
+        else:
+            slot = next_unobserved_expansion_slot
+            next_unobserved_expansion_slot += 1
+        assigned_slots.add(slot)
+        return slot
+
+    expansion_slots_by_block: list[tuple[int, ...]] = []
+    for expansion_dins in expansion_dins_by_block:
+        slots: list[int] = []
+        for din in expansion_dins:
+            slot = matched_expansion_slots.get(din)
+            if slot is None:
+                slot = next_expansion_slot()
+            assigned_slots.add(slot)
+            slots.append(slot)
+        expansion_slots_by_block.append(tuple(slots))
+
+    inferred_expansion_slots = [
+        slot for slot in bms_slots if slot not in assigned_slots
+    ]
+    if inferred_expansion_slots:
+        first_dins = list(expansion_dins_by_block[0])
+        first_slots = list(expansion_slots_by_block[0])
+        for slot in inferred_expansion_slots:
+            first_dins.append(
+                _inferred_expansion_din(components_payload, gateway_din, slot)
+            )
+            first_slots.append(slot)
+            assigned_slots.add(slot)
+        expansion_dins_by_block[0] = tuple(first_dins)
+        expansion_slots_by_block[0] = tuple(first_slots)
+
     next_expansion_display_index = 1
     out: list[MasterBlock] = []
     for i, block in enumerate(blocks):
-        expansion_dins = tuple(
-            expansion["din"]
-            for expansion in block.get("battery_expansions") or []
-            if isinstance(expansion, dict)
-            and isinstance(expansion.get("din"), str)
-            and expansion["din"]
-        )
+        expansion_dins = expansion_dins_by_block[i]
+        expansion_slots = expansion_slots_by_block[i]
         physical_din = _block_din(block)
         device_din = (
             f"{gateway_din}{MASTER_BATTERY_DIN_SUFFIX}"
             if i == 0
             else physical_din or f"{gateway_din}_battery_{i}"
         )
+        component_slot = (
+            0
+            if i == 0
+            else follower_slots[i - 1]
+            if i - 1 < len(follower_slots)
+            else i
+        )
+        first_expansion_slot = (
+            expansion_slots[0]
+            if expansion_slots
+            else max(powerwall_count, len(bms_slots))
+        )
         out.append(
             MasterBlock(
                 block_index=i,
-                component_slot=i,
+                component_slot=component_slot,
                 device_din=device_din,
                 physical_din=physical_din,
                 role="leader" if i == 0 else "follower",
                 expansion_dins=expansion_dins,
-                first_expansion_slot=next_expansion_slot,
+                expansion_slots=expansion_slots,
+                first_expansion_slot=first_expansion_slot,
                 first_expansion_display_index=next_expansion_display_index,
             )
         )
-        next_expansion_slot += len(expansion_dins)
         next_expansion_display_index += len(expansion_dins)
     return tuple(out)
 
