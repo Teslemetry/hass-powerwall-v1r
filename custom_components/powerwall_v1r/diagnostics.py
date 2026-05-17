@@ -34,6 +34,7 @@ async def async_get_config_entry_diagnostics(
                 "physical_din": block.physical_din,
                 "role": block.role,
                 "expansion_dins": list(block.expansion_dins),
+                "expansion_slots": list(block.expansion_slots),
                 "first_expansion_slot": block.first_expansion_slot,
             }
             for block in runtime.master_blocks
