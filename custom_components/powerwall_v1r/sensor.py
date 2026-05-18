@@ -51,6 +51,7 @@ from .coordinator import (
     PowerwallRuntimeData,
     PowerwallV1RConfigEntry,
 )
+from .reserve import raw_reserve_to_app_percent
 
 
 def _path(data: Any, *keys: Any) -> Any:
@@ -635,7 +636,9 @@ _CONFIG_SENSORS: tuple[PowerwallV1RSensorDescription, ...] = (
         state_class=MEAS,
         native_unit_of_measurement=PERCENTAGE,
         coordinator_attr="config",
-        value_fn=_config_field("site_info", "backup_reserve_percent"),
+        value_fn=lambda cfg: raw_reserve_to_app_percent(
+            _path(cfg, "site_info", "backup_reserve_percent")
+        ),
     ),
     PowerwallV1RSensorDescription(
         key="net_meter_mode",
