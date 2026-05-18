@@ -20,6 +20,7 @@ from .const import (
     CONF_GATEWAY_HOST,
     CONF_GATEWAY_PASSWORD,
     KEY_FILENAME,
+    LOGGER,
     MASTER_BATTERY_DIN_SUFFIX,
 )
 from .coordinator import (
@@ -178,6 +179,14 @@ def _signal_value(component: object, name: str) -> object:
     return None
 
 
+def _signal_float(component: object, name: str) -> float | None:
+    """Return a numeric component signal as float."""
+    value = _signal_value(component, name)
+    if isinstance(value, (int, float)):
+        return float(value)
+    return None
+
+
 def _component_serial(components_payload: dict, slot: int) -> str | None:
     """Return the best serial number for a component slot."""
     for kind in ("hvp", "bms", "pch", "baggr"):
@@ -202,9 +211,75 @@ def _bms_component_slots(components_payload: dict) -> tuple[int, ...]:
     return tuple(slots)
 
 
+def _status_full_pack_energy_kwh(status_payload: dict) -> float | None:
+    """Return aggregate system full-pack energy in kWh from status."""
+    value = _path(
+        status_payload,
+        "control",
+        "systemStatus",
+        "nominalFullPackEnergyWh",
+    )
+    if not isinstance(value, (int, float)) or value <= 0:
+        return None
+    return float(value) / 1000
+
+
+def _ghost_filtered_bms_component_slots(
+    components_payload: dict,
+    status_payload: dict,
+) -> tuple[int, ...]:
+    """Return BMS slots after dropping phantom expansion candidates.
+
+    Tesla can leave registered-but-not-installed expansion rows behind. They
+    look like BMS rows with plausible full capacity, no serial number, and
+    near-zero remaining energy. Only remove them when the aggregate system
+    capacity already matches the kept rows, which avoids dropping real
+    no-serial packs whose remaining-energy signal is stale.
+    """
+    slots = list(_bms_component_slots(components_payload))
+    aggregate_full_kwh = _status_full_pack_energy_kwh(status_payload)
+    if not slots or aggregate_full_kwh is None:
+        return tuple(slots)
+
+    ghost_slots: list[int] = []
+    for slot in slots:
+        if _component_serial(components_payload, slot):
+            continue
+        bms = _path(components_payload, "components", "bms", slot)
+        full = _signal_float(bms, "BMS_nominalFullPackEnergy")
+        remaining = _signal_float(bms, "BMS_nominalEnergyRemaining")
+        if full is None or full <= 0 or remaining is None:
+            continue
+        if remaining < 0.5 or remaining / full < 0.05:
+            ghost_slots.append(slot)
+
+    if not ghost_slots:
+        return tuple(slots)
+
+    kept_slots = [slot for slot in slots if slot not in ghost_slots]
+    kept_full_kwh = 0.0
+    for slot in kept_slots:
+        bms = _path(components_payload, "components", "bms", slot)
+        kept_full_kwh += _signal_float(bms, "BMS_nominalFullPackEnergy") or 0.0
+
+    full_delta = abs(aggregate_full_kwh - kept_full_kwh) / aggregate_full_kwh
+    if kept_full_kwh > 0 and full_delta < 0.10:
+        LOGGER.warning(
+            "Dropping %d ghost Powerwall expansion slot(s): aggregate %.2f kWh "
+            "matches real BMS slot sum %.2f kWh",
+            len(ghost_slots),
+            aggregate_full_kwh,
+            kept_full_kwh,
+        )
+        return tuple(kept_slots)
+
+    return tuple(slots)
+
+
 def _matched_expansion_slots(
     components_payload: dict,
     expansion_dins: tuple[str, ...],
+    bms_slots: tuple[int, ...] | None = None,
 ) -> dict[str, int]:
     """Match configured expansion DINs to component slots by serial suffix."""
     serial_to_din = {
@@ -216,7 +291,12 @@ def _matched_expansion_slots(
         return {}
 
     matched: dict[str, int] = {}
-    for slot in _bms_component_slots(components_payload):
+    candidate_slots = (
+        bms_slots
+        if bms_slots is not None
+        else _bms_component_slots(components_payload)
+    )
+    for slot in candidate_slots:
         serial = _component_serial(components_payload, slot)
         if serial in serial_to_din and serial_to_din[serial] not in matched:
             matched[serial_to_din[serial]] = slot
@@ -227,6 +307,7 @@ def _choose_follower_component_slots(
     components_payload: dict,
     powerwall_count: int,
     expansion_slots: set[int],
+    bms_slots: tuple[int, ...] | None = None,
 ) -> tuple[int, ...]:
     """Choose component slots for follower PW3 blocks.
 
@@ -238,7 +319,11 @@ def _choose_follower_component_slots(
     if follower_count == 0:
         return ()
 
-    slots = list(_bms_component_slots(components_payload))
+    slots = list(
+        bms_slots
+        if bms_slots is not None
+        else _bms_component_slots(components_payload)
+    )
     if not slots:
         return tuple(range(1, powerwall_count))
 
@@ -312,43 +397,63 @@ def _master_blocks(
     configured_expansion_dins = tuple(
         din for dins in expansion_dins_by_block for din in dins
     )
+    bms_slots = list(
+        _ghost_filtered_bms_component_slots(components_payload, status_payload)
+    )
     matched_expansion_slots = _matched_expansion_slots(
         components_payload,
         configured_expansion_dins,
+        tuple(bms_slots),
     )
     follower_slots = _choose_follower_component_slots(
         components_payload,
         powerwall_count,
         set(matched_expansion_slots.values()),
+        tuple(bms_slots),
     )
 
     assigned_slots = {0, *follower_slots, *matched_expansion_slots.values()}
-    bms_slots = list(_bms_component_slots(components_payload))
     fallback_expansion_slots = [
         slot for slot in bms_slots if slot not in assigned_slots
     ]
     next_unobserved_expansion_slot = max(powerwall_count, len(bms_slots))
 
-    def next_expansion_slot() -> int:
+    def next_expansion_slot() -> int | None:
         nonlocal next_unobserved_expansion_slot
         if fallback_expansion_slots:
             slot = fallback_expansion_slots.pop(0)
-        else:
+        elif not bms_slots:
+            # No component truth is available. Preserve the old config-driven
+            # device shape until the gateway starts returning BMS rows.
             slot = next_unobserved_expansion_slot
             next_unobserved_expansion_slot += 1
+        else:
+            return None
         assigned_slots.add(slot)
         return slot
 
     expansion_slots_by_block: list[tuple[int, ...]] = []
+    filtered_expansion_dins_by_block: list[tuple[str, ...]] = []
     for expansion_dins in expansion_dins_by_block:
+        kept_dins: list[str] = []
         slots: list[int] = []
         for din in expansion_dins:
             slot = matched_expansion_slots.get(din)
             if slot is None:
                 slot = next_expansion_slot()
+            if slot is None:
+                LOGGER.warning(
+                    "Dropping configured Powerwall expansion %s because no "
+                    "real BMS component slot is present",
+                    din,
+                )
+                continue
             assigned_slots.add(slot)
+            kept_dins.append(din)
             slots.append(slot)
+        filtered_expansion_dins_by_block.append(tuple(kept_dins))
         expansion_slots_by_block.append(tuple(slots))
+    expansion_dins_by_block = filtered_expansion_dins_by_block
 
     inferred_expansion_slots = [
         slot for slot in bms_slots if slot not in assigned_slots

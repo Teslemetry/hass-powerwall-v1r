@@ -13,6 +13,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .coordinator import PowerwallV1RConfigEntry
 from .entity import PowerwallV1REntity, config_path
+from .reserve import app_reserve_to_raw_percent, raw_reserve_to_app_percent
 
 
 async def async_setup_entry(
@@ -49,10 +50,10 @@ class BackupReserveNumber(PowerwallV1REntity, NumberEntity):
         value = config_path(
             self.coordinator.data, "site_info", "backup_reserve_percent"
         )
-        return float(value) if isinstance(value, (int, float)) else None
+        return raw_reserve_to_app_percent(value)
 
     async def async_set_native_value(self, value: float) -> None:
         await self.runtime.client.write_config(
-            {"site_info.backup_reserve_percent": int(value)}
+            {"site_info.backup_reserve_percent": app_reserve_to_raw_percent(value)}
         )
         await self.coordinator.async_request_refresh()
