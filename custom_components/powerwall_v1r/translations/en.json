@@ -25,7 +25,7 @@
       },
       "pair": {
         "title": "Pair Powerwall key",
-        "description": "A pairing key has been sent to **{site_name}**. Toggle the disconnect switch on the gateway, then continue."
+        "description": "A pairing key has been sent to **{site_name}**. Toggle the disconnect switch on the left side of the Powerwall 3 or right side of the Powerwall 2, then continue."
       }
     },
     "error": {
