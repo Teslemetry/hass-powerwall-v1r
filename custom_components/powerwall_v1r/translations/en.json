@@ -70,7 +70,6 @@
       "islander_grid_state": { "name": "Islander grid state" },
       "islander_grid_connection": { "name": "Islander grid connection" },
       "active_alerts": { "name": "Active alerts" },
-      "system_time": { "name": "Gateway time" },
       "backup_reserve_percent": { "name": "Backup reserve" },
       "net_meter_mode": { "name": "Net meter mode" },
       "customer_preferred_export_rule": { "name": "Export rule" },
