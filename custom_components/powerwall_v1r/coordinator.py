@@ -166,7 +166,7 @@ class BatterySoeCoordinator(_BasePowerwallCoordinator[float]):
         super().__init__(hass, entry, client, SCAN_BATTERY_SOE_SECONDS)
 
     async def _fetch(self) -> float:
-        return await self.client.get_battery_soe()
+        return await self.client.get_battery_soe_raw()
 
 
 class GridStatusCoordinator(_BasePowerwallCoordinator[str]):
