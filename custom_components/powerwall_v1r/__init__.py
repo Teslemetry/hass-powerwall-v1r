@@ -15,6 +15,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from tesla_protocol.energy_device import transport_pb2
 
 from .const import (
     CONF_GATEWAY_HOST,
@@ -35,6 +36,15 @@ from .coordinator import (
     PowerwallV1RConfigEntry,
     StatusCoordinator,
 )
+
+# aiopowerwall 0.10.0 reads LOCAL_PARTICIPANT_INSTALLER from transport_pb2, but
+# tesla-protocol 6 (pulled in by newer tesla-fleet-api) moved it to local_auth_api_pb2.
+if not hasattr(transport_pb2, "LOCAL_PARTICIPANT_INSTALLER"):
+    from tesla_protocol.energy_device import local_auth_api_pb2
+
+    transport_pb2.LOCAL_PARTICIPANT_INSTALLER = (
+        local_auth_api_pb2.LOCAL_PARTICIPANT_INSTALLER
+    )
 
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
